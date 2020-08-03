@@ -13,7 +13,7 @@ const Routes: React.FunctionComponent = () => (
 	<Switch>
 		<Route path="/" exact component={Recent} />
 		<Route path="/temporada" component={Season} />
-		<Route path="/categorias" component={Categories} />
+		<Route path="/filtrar/:search?" component={Categories} />
 		<Route path="/anime/:id" component={AnimePage} />
 		<Route path="*" component={NotFound} />
 	</Switch>

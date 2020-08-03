@@ -4,11 +4,24 @@ import { BrowserRouter } from 'react-router-dom';
 
 import Routes from './routes';
 
+import Header from './components/Header';
+
+import GlobalStyled from './styles/global.styles';
+
+import Background from './components/Background';
+
 const App: React.FunctionComponent = () => {
 	return (
-		<BrowserRouter>
-			<Routes />
-		</BrowserRouter>
+		<>
+			<GlobalStyled />
+
+			<BrowserRouter>
+				<Header />
+				<Background>
+					<Routes />
+				</Background>
+			</BrowserRouter>
+		</>
 	);
 };
 
