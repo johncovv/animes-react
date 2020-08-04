@@ -20,7 +20,7 @@ const Categories: React.FunctionComponent = () => {
 				</div>
 			)}
 
-			<style>{`.primary__background{background-image: url('${backgroundImage}');}`}</style>
+			<style>{`.primary__background{background-image: url('${backgroundImage}');} ::-webkit-scrollbar-thumb {background-color: var(--filter-color);}`}</style>
 		</>
 	);
 };

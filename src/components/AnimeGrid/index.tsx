@@ -6,18 +6,13 @@ import { Content, Item, ItemLink, Favorite, WatchLater } from './styles';
 
 import scaleImage from '../../assets/img/thumb-grid-proportion.png';
 
-interface DataProps {
-	data: DataItem[];
+interface AnimeGridProps {
+	data: ApiRequest.Anime[];
 }
 
-interface DataItem {
-	id: number;
-	title: string;
-	thumbnail: string;
-	views: number;
-}
-
-const AnimeGrid: React.FunctionComponent<DataProps> = ({ data }: DataProps) => {
+const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
+	data,
+}: AnimeGridProps) => {
 	const [favorites, setFavorites] = useState([{ id: 1 }, { id: 6 }, { id: 4 }]);
 	const [watchLater, setWatchLater] = useState([
 		{ id: 1 },

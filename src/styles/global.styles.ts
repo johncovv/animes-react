@@ -5,6 +5,12 @@ export default createGlobalStyle`
 		--history-color: #ffe700;
 		--wl-color: #48BB78;
 		--fav-color: #EC2E2E;
+		--secondary-bg-color: #1f1f1f;
+		--blue-color: #228ef3;
+
+		--recent-color: #bd3c2f;
+		--season-color: #228ef3;
+		--filter-color: #ff008c;
 	}
 
 	* {
@@ -38,4 +44,16 @@ export default createGlobalStyle`
 	a {
 		text-decoration: none;
 	}
+
+	/* scrollbar */
+
+	/* width */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--secondary-bg-color);
+}
 `;

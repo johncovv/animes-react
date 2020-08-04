@@ -195,21 +195,21 @@ export const HeaderTag = styled.header`
 	.navlink__recent {
 		&.navlink__active,
 		&:hover {
-			color: #bd3c2f !important;
+			color: var(--recent-color) !important;
 		}
 	}
 
 	.navlink__season {
 		&.navlink__active,
 		&:hover {
-			color: #228ef3 !important;
+			color: var(--season-color) !important;
 		}
 	}
 
 	.navlink__categories {
 		&.navlink__active,
 		&:hover {
-			color: #ff008c !important;
+			color: var(--filter-color) !important;
 		}
 	}
 `;

@@ -20,6 +20,8 @@
 	},
 	"plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
 	"rules": {
+		"react/prop-types": [2, { "ignore": ["children"] }],
+		"@typescript-eslint/ban-types": "off",
 		"react/jsx-one-expression-per-line": "off",
 		"react/jsx-indent-props": ["error", "tab"],
 		"react/jsx-indent": ["error", "tab"],
