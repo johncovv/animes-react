@@ -1,6 +1,12 @@
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
+	:root {
+		--history-color: #ffe700;
+		--wl-color: #48BB78;
+		--fav-color: #EC2E2E;
+	}
+
 	* {
 		margin: 0;
 		padding: 0;

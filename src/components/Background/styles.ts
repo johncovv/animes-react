@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Content = styled.div`
-	height: 2000px;
+	min-height: 100vh;
 
 	background-position-y: 70px;
 	background-position-x: center;

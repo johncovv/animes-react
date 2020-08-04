@@ -154,12 +154,22 @@ export const HeaderTag = styled.header`
 			}
 
 			svg {
+				&.history__popup {
+					&:hover,
+					&.popup__active {
+						* {
+							stroke: var(--history-color);
+							transition: 0.3s;
+						}
+					}
+				}
+
 				&.saves__popup {
 					&:hover,
 					&.popup__active {
 						path {
-							fill: red;
-							stroke: red;
+							fill: var(--fav-color);
+							stroke: var(--fav-color);
 							transition: 0.3s;
 						}
 					}
@@ -169,9 +179,11 @@ export const HeaderTag = styled.header`
 					cursor: pointer;
 				}
 
-				&:not(:last-child) {
+				&:nth-child(1) {
 					margin-right: 25px;
+				}
 
+				&:not(:last-child) {
 					@media only screen and (max-width: 767px) {
 						margin-right: 15px !important;
 					}
