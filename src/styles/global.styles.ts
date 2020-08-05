@@ -11,6 +11,11 @@ export default createGlobalStyle`
 		--recent-color: #bd3c2f;
 		--season-color: #228ef3;
 		--filter-color: #ff008c;
+
+		--secondary-text-color: #929292;
+		--ternary-text-color: #616161;
+
+		--rounded: 8px;
 	}
 
 	* {
@@ -45,6 +50,10 @@ export default createGlobalStyle`
 		text-decoration: none;
 	}
 
+	ul {
+		list-style: none;
+	}
+
 	/* scrollbar */
 
 	/* width */
@@ -54,6 +63,6 @@ export default createGlobalStyle`
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--secondary-bg-color);
+  background: #000;
 }
 `;

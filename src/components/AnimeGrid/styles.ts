@@ -153,6 +153,16 @@ export const ItemLink = styled(Link)`
 
 		svg {
 			stroke: #fff;
+
+			&:hover {
+				width: 60px;
+				height: 60px;
+				transition: all 0.2s ease-in-out;
+
+				polygon {
+					fill: #fff;
+				}
+			}
 		}
 	}
 

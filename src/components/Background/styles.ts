@@ -11,7 +11,7 @@ export const Content = styled.div`
 	padding: 95px 25px 25px;
 
 	@media only screen and (max-width: 767px) {
-		padding: 20px 20px 50px !important;
+		padding: 20px 20px 70px !important;
 		background-size: auto;
 		background-position-y: top;
 	}

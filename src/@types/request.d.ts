@@ -15,4 +15,10 @@ declare namespace ApiRequest {
 		title: string;
 		date?: string;
 	}
+
+	export interface EpiOption {
+		id: number;
+		title: string;
+		url: string;
+	}
 }
