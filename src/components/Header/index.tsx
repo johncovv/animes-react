@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import { NavLink, Link, useHistory } from 'react-router-dom';
 
@@ -10,6 +10,31 @@ const Header: React.FunctionComponent = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const history = useHistory();
+
+	const [historyPopup, setHistoryPopup] = useState(false);
+	const [savedPopup, setSavedPopup] = useState(false);
+
+	useEffect(() => {
+		const historyElement = window.document.querySelector('.history');
+
+		if (historyElement)
+			if (historyPopup) {
+				historyElement.classList.remove('hidden');
+			} else {
+				historyElement.classList.add('hidden');
+			}
+	}, [historyPopup]);
+
+	useEffect(() => {
+		const savedElement = window.document.querySelector('.history');
+
+		if (savedElement)
+			if (savedPopup) {
+				savedElement.classList.remove('hidden');
+			} else {
+				savedElement.classList.add('hidden');
+			}
+	}, [savedPopup]);
 
 	const handleMenuMobile = useCallback(() => {
 		setIsOpen(!isOpen);
@@ -35,6 +60,14 @@ const Header: React.FunctionComponent = () => {
 		},
 		[history, searchInput],
 	);
+
+	const handleToggleHistory = useCallback(() => {
+		setHistoryPopup(!historyPopup);
+	}, [historyPopup]);
+
+	const handleToggleSaved = useCallback(() => {
+		setSavedPopup(!savedPopup);
+	}, [savedPopup]);
 
 	return (
 		<HeaderTag>
@@ -94,14 +127,20 @@ const Header: React.FunctionComponent = () => {
 				</div>
 				<div className="header__buttons">
 					<FiArchive
-						className="history__popup"
+						className={`history__popup ${historyPopup ? 'popup__active' : ''}`}
 						size={24}
-						onClick={handleCloseMenuMobile}
+						onClick={() => {
+							handleCloseMenuMobile();
+							handleToggleHistory();
+						}}
 					/>
 					<FiHeart
 						className="saves__popup"
 						size={24}
-						onClick={handleCloseMenuMobile}
+						onClick={() => {
+							handleCloseMenuMobile();
+							handleToggleSaved();
+						}}
 					/>
 					<FiMenu
 						className="menu__mobile"
