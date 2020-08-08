@@ -3,6 +3,8 @@ import backgroundImage from '../../assets/img/background/season.png';
 
 import { FilterAnime } from '../../utils/filter-request-data';
 
+import GlobalSeason from '../../styles/page.styles';
+
 import api from '../../services/api.client';
 
 import Grid from '../../components/AnimeGrid';
@@ -36,7 +38,7 @@ const Season: React.FunctionComponent = () => {
 				<Grid data={data} />
 			</Content>
 
-			<style>{`.primary__background{background-image: url('${backgroundImage}');} ::-webkit-scrollbar-thumb {background-color: var(--season-color);}`}</style>
+			<GlobalSeason backgroundImage={backgroundImage} varRoot="season" />
 		</>
 	);
 };

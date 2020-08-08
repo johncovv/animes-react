@@ -20,6 +20,14 @@
 	},
 	"plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
 	"rules": {
+		"react/jsx-props-no-spreading": [
+			"error",
+			{
+				"html": "ignore",
+				"custom": "ignore",
+				"exceptions": [""]
+			}
+		],
 		"jsx-a11y/media-has-caption": "off",
 		"react/prop-types": [2, { "ignore": ["children"] }],
 		"@typescript-eslint/ban-types": "off",

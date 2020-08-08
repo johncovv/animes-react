@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 
 import backgroundImage from '../../assets/img/background/filter.png';
 
+import GlobalFilters from '../../styles/page.styles';
+
 interface CategoriesParams {
 	search: string;
 }
@@ -20,7 +22,7 @@ const Categories: React.FunctionComponent = () => {
 				</div>
 			)}
 
-			<style>{`.primary__background{background-image: url('${backgroundImage}');} ::-webkit-scrollbar-thumb {background-color: var(--filter-color);}`}</style>
+			<GlobalFilters backgroundImage={backgroundImage} varRoot="filter" />
 		</>
 	);
 };

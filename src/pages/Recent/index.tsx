@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import backgroundImage from '../../assets/img/background/recents.png';
 
+import GlobalRecents from '../../styles/page.styles';
+
 import Grid from '../../components/AnimeGrid';
 
 import { Content, Title } from './styles';
@@ -23,7 +25,6 @@ const Recent: React.FunctionComponent = () => {
 		requestData();
 	}, []);
 
-
 	return (
 		<>
 			<Content>
@@ -32,7 +33,7 @@ const Recent: React.FunctionComponent = () => {
 				<Grid data={data} />
 			</Content>
 
-			<style>{`.primary__background{background-image: url('${backgroundImage}');} ::-webkit-scrollbar-thumb {background-color: var(--recent-color);}`}</style>
+			<GlobalRecents backgroundImage={backgroundImage} varRoot="recent" />
 		</>
 	);
 };

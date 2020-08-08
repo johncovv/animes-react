@@ -55,14 +55,15 @@ export default createGlobalStyle`
 	}
 
 	/* scrollbar */
+	::-webkit-scrollbar {
+		width: 10px;
 
-	/* width */
-::-webkit-scrollbar {
-  width: 12px;
-}
+		@media only screen and (max-width: 767px) {
+			width: 5px !important;
+		}
+	}
 
-/* Track */
-::-webkit-scrollbar-track {
-  background: #000;
-}
+	::-webkit-scrollbar-thumb {
+		border-radius: 50px;
+	}
 `;

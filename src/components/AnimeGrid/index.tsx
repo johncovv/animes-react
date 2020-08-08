@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from 'react';
 
-import { FiPlay, FiEye } from 'react-icons/fi';
+import { FiEye } from 'react-icons/fi';
+
+import { AiFillPlayCircle } from 'react-icons/ai';
 
 import { Content, Item, ItemLink, Favorite, WatchLater } from './styles';
 
@@ -77,15 +79,17 @@ const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 								/>
 								<img className="grid__scale--thumb" src={scaleImage} alt="" />
 								<p className="grid__item--title">{title}</p>
-								<div className="grid__item--title-popup">
-									<p>{title}</p>
-								</div>
-								<div className="grid__item--play-button">
-									<FiPlay size={50} />
-								</div>
-								<div className="grid__item--views">
-									<FiEye size={18} />
-									<p>{handleFilterViews(views)} views</p>
+								<div className="grid__item-hover">
+									<div className="grid__item--title-popup">
+										<p>{title}</p>
+									</div>
+									<div className="grid__item--play-button">
+										<AiFillPlayCircle size={50} />
+									</div>
+									<div className="grid__item--views">
+										<FiEye size={18} />
+										<p>{handleFilterViews(views)} views</p>
+									</div>
 								</div>
 							</ItemLink>
 						</Item>

@@ -17,6 +17,10 @@ export const Description = styled.div`
 	display: flex;
 	flex-flow: row nowrap;
 
+	@media only screen and (max-width: 767px) {
+		padding: 1.3rem !important;
+	}
+
 	@media only screen and (max-width: 639px) {
 		flex-flow: column nowrap;
 	}
@@ -97,15 +101,68 @@ export const PlayerContainer = styled.div`
 	flex-flow: row nowrap;
 	margin-bottom: 25px;
 
+	@media only screen and (max-width: 1023px) {
+		#player {
+			width: 60% !important;
+		}
+
+		.episodes__list {
+			width: 40% !important;
+		}
+	}
+
+	@media only screen and (max-width: 767px) {
+		flex-flow: column nowrap;
+
+		#player {
+			width: 100% !important;
+		}
+
+		.episodes__list {
+			width: 100% !important;
+			margin-left: 0 !important;
+			margin-top: 25px;
+
+			height: 400px !important;
+
+			&--container {
+				&::-webkit-scrollbar-track {
+					background-image: linear-gradient(
+						180deg,
+						#000,
+						var(--secondary-bg-color)
+					);
+				}
+
+				& button {
+					height: 70px !important;
+					align-items: center !important;
+
+					&:not(:last-child) {
+						margin-bottom: 5px !important;
+					}
+
+					img {
+						width: 110px !important;
+					}
+
+					.titles-container {
+						.title {
+							font-size: 14px !important;
+						}
+
+						.anime-title {
+							font-size: 13px !important;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	#player {
 		width: 70%;
-		overflow: hidden;
 		border-radius: var(--rounded);
-
-		video {
-			width: 100%;
-			display: block;
-		}
 	}
 
 	.episodes__list {
@@ -131,17 +188,14 @@ export const PlayerContainer = styled.div`
 		}
 
 		&--container {
-			background-image: linear-gradient(
-				180deg,
-				var(--secondary-bg-color) 80%,
-				#131313
-			);
+			background-color: var(--secondary-bg-color);
 			overflow-y: auto;
 			overflow-x: hidden;
 			position: absolute;
 			top: 45px;
 			bottom: 0;
-			width: 100%;
+			left: 0;
+			right: 0;
 			padding: 15px;
 
 			button {
@@ -150,6 +204,8 @@ export const PlayerContainer = styled.div`
 				display: flex;
 				flex-flow: row;
 				width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
 
 				&:not(:last-child) {
 					margin-bottom: 15px;
@@ -158,6 +214,7 @@ export const PlayerContainer = styled.div`
 				img {
 					width: 25%;
 					margin-right: 15px;
+					display: block;
 				}
 
 				&:hover {
@@ -169,6 +226,7 @@ export const PlayerContainer = styled.div`
 					display: flex;
 					flex-flow: column nowrap;
 					text-align: left;
+					overflow: hidden;
 
 					.title {
 						font-size: 15px;

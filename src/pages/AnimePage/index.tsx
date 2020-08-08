@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { FiHeart, FiClock } from 'react-icons/fi';
 
+import Player from '../../components/Player';
 import backgroundImage from '../../assets/img/background/anime.png';
 
 import {
@@ -18,8 +19,15 @@ import { Title, Content, Description, PlayerContainer } from './styles';
 
 import playerPoster from '../../assets/img/background/player2.png';
 
+import GlobalAnime from '../../styles/page.styles';
+
 interface AnimeParams {
 	animeId: string;
+}
+
+interface ActiveEpisode {
+	id: number | undefined;
+	title: string | undefined;
 }
 
 const AnimePage: React.FunctionComponent = () => {
@@ -33,6 +41,11 @@ const AnimePage: React.FunctionComponent = () => {
 	const [episodeOptions, setEpisodeOptions] = useState<ApiRequest.EpiOption[]>(
 		[],
 	);
+
+	const [espideoActive, setEpisodeActive] = useState<ActiveEpisode>({
+		id: undefined,
+		title: undefined,
+	});
 
 	useEffect(() => {
 		const episodesListRequest = async (): Promise<void> => {
@@ -64,18 +77,29 @@ const AnimePage: React.FunctionComponent = () => {
 		episodesListRequest();
 	}, [animeId]);
 
-	const handleEpisodeRequest = useCallback(async (event, id: number) => {
-		event.preventDefault();
+	const handleEpisodeRequest = useCallback(
+		async (event, id: number, title: string) => {
+			event.preventDefault();
 
-		try {
-			const response = await api.get(`/api/episodioexes/links?id=${id}`);
+			try {
+				const response = await api.get(`/api/episodioexes/links?id=${id}`);
 
-			const filtered = await FilterEpisodeOptions(response.data);
-			setEpisodeOptions([...filtered]);
-		} catch (err) {
-			window.console.log(err);
-		}
-	}, []);
+				const filtered = await FilterEpisodeOptions(response.data);
+				setEpisodeOptions([...filtered]);
+				setEpisodeActive({ id, title });
+			} catch (err) {
+				window.console.log(err);
+			}
+		},
+		[],
+	);
+
+	const options = {
+		poster: playerPoster,
+		autoplay: true,
+		sources: [...episodeOptions],
+		episode: espideoActive,
+	};
 
 	return (
 		<>
@@ -83,14 +107,7 @@ const AnimePage: React.FunctionComponent = () => {
 
 			<Content>
 				<PlayerContainer>
-					<div id="player">
-						<video
-							controls={!!episodeOptions[0]}
-							autoPlay={!!episodeOptions[0]}
-							poster={playerPoster}
-							src={episodeOptions[0]?.url}
-						/>
-					</div>
+					<Player {...options} />
 					<div className="episodes__list">
 						<div className="episodes__list--options">
 							<FiHeart size={24} />
@@ -102,7 +119,7 @@ const AnimePage: React.FunctionComponent = () => {
 									<button
 										type="button"
 										key={id}
-										onClick={(e) => handleEpisodeRequest(e, id)}
+										onClick={(e) => handleEpisodeRequest(e, id, title)}
 									>
 										<img
 											src={`http://thumb.zetai.info/${id}.jpg`}
@@ -150,7 +167,7 @@ const AnimePage: React.FunctionComponent = () => {
 				</Description>
 			</Content>
 
-			<style>{`.primary__background{background-image: url('${backgroundImage}');} ::-webkit-scrollbar-thumb {background-color: var(--blue-color);}`}</style>
+			<GlobalAnime backgroundImage={backgroundImage} varRoot="season" />
 		</>
 	);
 };
