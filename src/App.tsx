@@ -10,18 +10,22 @@ import GlobalStyled from './styles/global.styles';
 
 import Background from './components/Background';
 
+import History from './components/History';
+
+import AppProvider from './hooks';
+
 const App: React.FunctionComponent = () => {
 	return (
-		<>
-			<GlobalStyled />
-
-			<BrowserRouter>
+		<BrowserRouter>
+			<AppProvider>
 				<Header />
+				<History />
 				<Background>
 					<Routes />
 				</Background>
-			</BrowserRouter>
-		</>
+			</AppProvider>
+			<GlobalStyled />
+		</BrowserRouter>
 	);
 };
 
