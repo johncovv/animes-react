@@ -136,13 +136,12 @@ export const PlayerContainer = styled.div`
 
 				& button {
 					height: 70px !important;
-					align-items: center !important;
 
 					&:not(:last-child) {
 						margin-bottom: 5px !important;
 					}
 
-					img {
+					.thumb {
 						width: 110px !important;
 					}
 
@@ -203,6 +202,7 @@ export const PlayerContainer = styled.div`
 				border: none;
 				display: flex;
 				flex-flow: row;
+				align-items: center;
 				width: 100%;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -211,14 +211,62 @@ export const PlayerContainer = styled.div`
 					margin-bottom: 15px;
 				}
 
-				img {
+				.thumb {
+					position: relative;
 					width: 25%;
 					margin-right: 15px;
-					display: block;
+
+					.uncheck-history {
+						all: unset;
+						position: absolute;
+						z-index: 10;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+
+						justify-content: center;
+						align-items: center;
+
+						display: none;
+						transition: fill 0.2s ease-in-out;
+
+						&.checked {
+							display: flex;
+						}
+
+						svg {
+							fill: #fff;
+
+							&:hover {
+								fill: var(--fav-color);
+							}
+						}
+					}
+
+					img {
+						width: 100%;
+						display: block;
+					}
 				}
 
 				&:hover {
-					filter: brightness(0.6);
+					p,
+					img {
+						filter: brightness(0.5);
+					}
+				}
+
+				&.checked {
+					img {
+						filter: brightness(0.1);
+					}
+
+					.titles-container {
+						p {
+							color: #000;
+						}
+					}
 				}
 
 				.titles-container {
@@ -240,7 +288,7 @@ export const PlayerContainer = styled.div`
 
 					.anime-title {
 						font-size: 14px;
-						color: vaR(--ternary-text-color);
+						color: var(--ternary-text-color);
 						white-space: nowrap;
 						overflow: hidden;
 						text-overflow: ellipsis;

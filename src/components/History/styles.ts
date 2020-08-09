@@ -27,6 +27,11 @@ export const HistoryContent = styled.div`
 		align-items: center;
 
 		&--inner {
+			background-image: linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0.63) 0%,
+				rgba(31, 31, 31, 0) 100%
+			);
 			background-color: var(--secondary-bg-color);
 			border-radius: var(--rounded);
 			width: 100%;
@@ -34,9 +39,52 @@ export const HistoryContent = styled.div`
 
 			overflow-y: auto;
 
-			.history__item--container {
+			.history__items--container {
 				margin: 25px 0;
 				padding: 0 25px;
+				display: flex;
+				flex-flow: column nowrap;
+
+				.history__title {
+					margin-bottom: 15px;
+				}
+
+				.history__item {
+					cursor: pointer;
+					width: 100%;
+					display: flex;
+					flex-flow: row nowrap;
+					align-items: center;
+					height: 37px;
+					font-size: 18px;
+
+					&:not(:last-child) {
+						margin-bottom: 15px;
+					}
+
+					.history__item--link {
+						padding-right: 15px;
+						color: #fff;
+						flex: 1;
+						display: flex;
+						flex-flow: row nowrap;
+						align-items: center;
+						justify-content: space-between;
+
+						&:hover {
+							color: var(--history-color);
+						}
+					}
+
+					.history__item--delete-icon {
+						fill: #fff;
+
+						&:hover {
+							transition: fill 0.2s ease-in-out;
+							fill: var(--fav-color);
+						}
+					}
+				}
 			}
 		}
 	}

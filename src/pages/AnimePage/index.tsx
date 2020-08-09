@@ -4,8 +4,12 @@ import { useParams } from 'react-router-dom';
 
 import { FiHeart, FiClock } from 'react-icons/fi';
 
+import { BsFillEyeSlashFill } from 'react-icons/bs';
+
 import Player from '../../components/Player';
 import backgroundImage from '../../assets/img/background/anime.png';
+
+import { useHistory } from '../../hooks/history';
 
 import {
 	FilterEpisodesList,
@@ -23,6 +27,7 @@ import GlobalAnime from '../../styles/page.styles';
 
 interface AnimeParams {
 	animeId: string;
+	episodeId: string;
 }
 
 interface ActiveEpisode {
@@ -31,7 +36,9 @@ interface ActiveEpisode {
 }
 
 const AnimePage: React.FunctionComponent = () => {
-	const { animeId } = useParams<AnimeParams>();
+	const { addToHistory, history, removeFromHistory } = useHistory();
+
+	const { animeId, episodeId } = useParams<AnimeParams>();
 
 	const [animeDescription, setAnimeDescription] = useState<ApiRequest.Anime>(
 		{} as ApiRequest.Anime,
@@ -47,12 +54,43 @@ const AnimePage: React.FunctionComponent = () => {
 		title: undefined,
 	});
 
+	const handleToggleHistory = useCallback(
+		(id: number, title: string, currentTime: number) => {
+			addToHistory({
+				id,
+				animeId: parseInt(animeId, 10),
+				title,
+				currentTime,
+			});
+		},
+		[addToHistory, animeId],
+	);
+
+	const handleEpisodeRequest = useCallback(
+		async (event, id: number, title: string) => {
+			if (event) event.preventDefault();
+
+			// request episode options
+			try {
+				const response = await api.get(`/api/episodioexes/links?id=${id}`);
+
+				const filtered = await FilterEpisodeOptions(response.data);
+				setEpisodeOptions([...filtered]);
+				setEpisodeActive({ id, title });
+			} catch (err) {
+				window.console.log(err);
+			}
+		},
+		[],
+	);
+
 	useEffect(() => {
 		const episodesListRequest = async (): Promise<void> => {
 			try {
 				const response = await api.get(`/api/episodioexes/${animeId}`);
 
 				const filtered = await FilterEpisodesList(response.data);
+
 				setEpisodesList((state) => [...state, ...filtered]);
 			} catch (err) {
 				window.console.log(err);
@@ -66,6 +104,7 @@ const AnimePage: React.FunctionComponent = () => {
 				);
 
 				const filtered = await FilterAnime(response.data.value);
+
 				setAnimeDescription(filtered[0]);
 			} catch (err) {
 				window.console.log(err);
@@ -77,22 +116,21 @@ const AnimePage: React.FunctionComponent = () => {
 		episodesListRequest();
 	}, [animeId]);
 
-	const handleEpisodeRequest = useCallback(
-		async (event, id: number, title: string) => {
-			event.preventDefault();
+	useEffect(() => {
+		const requestOnLoadEpisode = async (): Promise<void> => {
+			if (episodeId) {
+				const episode = parseInt(episodeId, 10);
 
-			try {
-				const response = await api.get(`/api/episodioexes/links?id=${id}`);
-
-				const filtered = await FilterEpisodeOptions(response.data);
-				setEpisodeOptions([...filtered]);
-				setEpisodeActive({ id, title });
-			} catch (err) {
-				window.console.log(err);
+				const getEpisodeTitle = await episodesList.find(
+					(i) => i.id === episode,
+				);
+				if (getEpisodeTitle)
+					await handleEpisodeRequest(undefined, episode, getEpisodeTitle.title);
 			}
-		},
-		[],
-	);
+		};
+
+		requestOnLoadEpisode();
+	}, [episodeId, handleEpisodeRequest, episodesList]);
 
 	const options = {
 		poster: playerPoster,
@@ -119,12 +157,30 @@ const AnimePage: React.FunctionComponent = () => {
 									<button
 										type="button"
 										key={id}
-										onClick={(e) => handleEpisodeRequest(e, id, title)}
+										onClick={(e) => {
+											handleEpisodeRequest(e, id, title);
+											handleToggleHistory(id, title, 0);
+										}}
+										className={`${
+											history.find((i) => i.id === id) ? 'checked' : ''
+										}`}
 									>
-										<img
-											src={`http://thumb.zetai.info/${id}.jpg`}
-											alt={`${title} thumbnail`}
-										/>
+										<div className="thumb">
+											<span
+												className={`uncheck-history ${
+													history.find((i) => i.id === id) ? 'checked' : ''
+												}`}
+											>
+												<BsFillEyeSlashFill
+													size={25}
+													onClick={() => removeFromHistory(id)}
+												/>
+											</span>
+											<img
+												src={`http://thumb.zetai.info/${id}.jpg`}
+												alt={`${title} thumbnail`}
+											/>
+										</div>
 										<div className="titles-container">
 											<p className="title">{title}</p>
 											<p className="anime-title">{animeDescription.title}</p>

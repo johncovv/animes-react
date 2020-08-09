@@ -9,7 +9,8 @@ interface HistoryData {
 
 interface HistoryContextData {
 	history: HistoryData[];
-	toggleHistory(data: HistoryData): void;
+	addToHistory(data: HistoryData): void;
+	removeFromHistory(id: number): void;
 }
 
 const HistoryContext = createContext<HistoryContextData>(
@@ -25,27 +26,38 @@ export const HistoryProvider: React.FunctionComponent = ({ children }) => {
 		return [] as HistoryData[];
 	});
 
-	const toggleHistory = useCallback(
+	const addToHistory = useCallback(
 		({ id, animeId, title, currentTime }: HistoryData) => {
+			const exist = history.find((i) => i.id === id);
+
+			if (!exist) {
+				const concat = [...history, { id, animeId, title, currentTime }];
+
+				setHistory(concat);
+				localStorage.setItem('@AnimesReact:history', JSON.stringify(concat));
+			}
+		},
+		[history],
+	);
+
+	const removeFromHistory = useCallback(
+		(id) => {
 			const exist = history.find((i) => i.id === id);
 
 			if (exist) {
 				const filtered = history.filter((y) => y.id !== id);
 
 				setHistory(filtered);
-				localStorage.setItem('@Animesreact:history', JSON.stringify(filtered));
-			} else {
-				const concat = [...history, { id, animeId, title, currentTime }];
-
-				setHistory(concat);
-				localStorage.setItem('@Animesreact:history', JSON.stringify(concat));
+				localStorage.setItem('@AnimesReact:history', JSON.stringify(filtered));
 			}
 		},
 		[history],
 	);
 
 	return (
-		<HistoryContext.Provider value={{ history, toggleHistory }}>
+		<HistoryContext.Provider
+			value={{ history, addToHistory, removeFromHistory }}
+		>
 			{children}
 		</HistoryContext.Provider>
 	);
