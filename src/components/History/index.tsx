@@ -6,7 +6,9 @@ import { GoEyeClosed } from 'react-icons/go';
 
 import { useHistory } from '../../hooks/history';
 
-import { HistoryContent } from './styles';
+import { HistoryItem, Title } from './styles';
+
+import Popup from '../Popup';
 
 const History: React.FunctionComponent = () => {
 	const { history, removeFromHistory } = useHistory();
@@ -16,7 +18,7 @@ const History: React.FunctionComponent = () => {
 	};
 
 	const handleHiddeHistory = (): void => {
-		const historyPopup = window.document.querySelector('.history');
+		const historyPopup = window.document.querySelector('.popup-history');
 		const svg = window.document.querySelector('header .history__popup');
 
 		if (historyPopup && svg) {
@@ -26,37 +28,31 @@ const History: React.FunctionComponent = () => {
 	};
 
 	return (
-		<HistoryContent className="history hidden">
-			<div className="history__container">
-				<div className="history__container--inner">
-					<div className="history__items--container">
-						<p className="history__title">Histórico</p>
-						{history &&
-							history.reverse().map(({ id, animeId, title, currentTime }) => (
-								<div key={id} className="history__item">
-									<Link
-										className="history__item--link"
-										onClick={handleHiddeHistory}
-										to={`/anime/${animeId}/${id}`}
-									>
-										<p>{title}</p>
-										<p className="history__item--current-time">
-											{handleCurrentTime(currentTime)}
-										</p>
-									</Link>
-									<GoEyeClosed
-										size={25}
-										className="history__item--delete-icon"
-										onClick={(e) => {
-											removeFromHistory(id);
-										}}
-									/>
-								</div>
-							))}
-					</div>
-				</div>
-			</div>
-		</HistoryContent>
+		<Popup className="history">
+			<Title className="history-title">Histórico</Title>
+			{history &&
+				history.reverse().map(({ id, animeId, title, currentTime }) => (
+					<HistoryItem key={id} className="history__item">
+						<Link
+							className="history__item--link"
+							onClick={handleHiddeHistory}
+							to={`/anime/${animeId}/${id}`}
+						>
+							<p>{title}</p>
+							<p className="history__item--current-time">
+								{handleCurrentTime(currentTime)}
+							</p>
+						</Link>
+						<GoEyeClosed
+							size={25}
+							className="history__item--delete-icon"
+							onClick={() => {
+								removeFromHistory(id);
+							}}
+						/>
+					</HistoryItem>
+				))}
+		</Popup>
 	);
 };
 

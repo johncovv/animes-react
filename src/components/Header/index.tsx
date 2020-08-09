@@ -15,7 +15,7 @@ const Header: React.FunctionComponent = () => {
 	const [savedPopup, setSavedPopup] = useState(false);
 
 	useEffect(() => {
-		const historyElement = window.document.querySelector('.history');
+		const historyElement = window.document.querySelector('.popup-history');
 
 		if (historyElement)
 			if (historyPopup) {
@@ -26,7 +26,7 @@ const Header: React.FunctionComponent = () => {
 	}, [historyPopup]);
 
 	useEffect(() => {
-		const savedElement = window.document.querySelector('.history');
+		const savedElement = window.document.querySelector('.popup-saved');
 
 		if (savedElement)
 			if (savedPopup) {
@@ -135,7 +135,7 @@ const Header: React.FunctionComponent = () => {
 						}}
 					/>
 					<FiHeart
-						className="saves__popup"
+						className={`saves__popup ${savedPopup ? 'popup__active' : ''}`}
 						size={24}
 						onClick={() => {
 							handleCloseMenuMobile();

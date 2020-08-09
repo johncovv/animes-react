@@ -1,4 +1,5 @@
-import React, { useCallback, useState } from 'react';
+/* eslint-disable react/require-default-props */
+import React, { useCallback } from 'react';
 
 import { FiEye } from 'react-icons/fi';
 
@@ -8,88 +9,83 @@ import { Content, Item, ItemLink, Favorite, WatchLater } from './styles';
 
 import scaleImage from '../../assets/img/thumb-grid-proportion.png';
 
+import { useSaved } from '../../hooks/saved';
+
 interface AnimeGridProps {
 	data: ApiRequest.Anime[];
+	isPopup?: boolean;
+	className?: string;
 }
 
 const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 	data,
+	isPopup,
+	className,
 }: AnimeGridProps) => {
-	const [favorites, setFavorites] = useState([{ id: 1 }, { id: 6 }, { id: 4 }]);
-	const [watchLater, setWatchLater] = useState([
-		{ id: 1 },
-		{ id: 6 },
-		{ id: 4 },
-	]);
-
-	const handleFavorite = useCallback(
-		(id: number) => {
-			const exist = favorites.find((item) => item.id === id);
-
-			if (exist) {
-				setFavorites((state) => state.filter((item) => item.id !== id));
-			} else {
-				setFavorites((state) => [...state, { id }]);
-			}
-		},
-		[favorites],
-	);
-
-	const handleWatchLater = useCallback(
-		(id: number) => {
-			const exist = watchLater.find((item) => item.id === id);
-
-			if (exist) {
-				setWatchLater((state) => state.filter((item) => item.id !== id));
-			} else {
-				setWatchLater((state) => [...state, { id }]);
-			}
-		},
-		[watchLater],
-	);
+	const {
+		toggleFavorites,
+		toggleWatchLater,
+		favorites,
+		watchLater,
+	} = useSaved();
 
 	function handleFilterViews(number: number): string {
 		return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.');
 	}
 
+	const handleClosePopup = useCallback(() => {
+		if (isPopup) {
+			const popup = window.document.querySelector('.popup-saved');
+
+			if (popup) {
+				popup.classList.toggle('hidden');
+			}
+		}
+	}, [isPopup]);
+
 	return (
 		<div>
-			<Content>
+			<Content className={className}>
 				{data &&
-					data.map(({ id, thumbnail, title, views }) => (
-						<Item key={id}>
+					data.map((item) => (
+						<Item key={item.id} className="grid__item--container">
 							<div className="grid__options">
 								<WatchLater
 									size={24}
 									className="grid__options--wl"
-									onClick={() => handleWatchLater(id)}
-									$isChecked={!!watchLater.find((a) => a.id === id)}
+									onClick={() => toggleWatchLater(item)}
+									$isChecked={!!watchLater.find((i) => i.id === item.id)}
 								/>
 								<Favorite
 									size={24}
 									className="grid__options--fav"
-									onClick={() => handleFavorite(id)}
-									$isChecked={!!favorites.find((a) => a.id === id)}
+									onClick={() => toggleFavorites(item)}
+									$isChecked={!!favorites.find((i) => i.id === item.id)}
 								/>
 							</div>
-							<ItemLink to={`/anime/${id}`}>
+							<ItemLink
+								to={`/anime/${item.id}`}
+								onClick={() => handleClosePopup()}
+							>
 								<span
 									className="grid__item--thumb"
-									style={{ backgroundImage: `url(${thumbnail})` }}
+									style={{ backgroundImage: `url(${item.thumbnail})` }}
 								/>
 								<img className="grid__scale--thumb" src={scaleImage} alt="" />
-								<p className="grid__item--title">{title}</p>
+								<p className="grid__item--title">{item.title}</p>
 								<div className="grid__item-hover">
 									<div className="grid__item--title-popup">
-										<p>{title}</p>
+										<p>{item.title}</p>
 									</div>
 									<div className="grid__item--play-button">
 										<AiFillPlayCircle size={50} />
 									</div>
-									<div className="grid__item--views">
-										<FiEye size={18} />
-										<p>{handleFilterViews(views)} views</p>
-									</div>
+									{item.views && (
+										<div className="grid__item--views">
+											<FiEye size={18} />
+											<p>{handleFilterViews(item.views)} views</p>
+										</div>
+									)}
 								</div>
 							</ItemLink>
 						</Item>

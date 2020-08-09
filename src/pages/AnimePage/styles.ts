@@ -181,8 +181,38 @@ export const PlayerContainer = styled.div`
 			justify-content: flex-end;
 			align-items: center;
 
+			&-favorite {
+				&:hover {
+					stroke: var(--fav-color);
+				}
+
+				&.checked {
+					stroke: var(--fav-color);
+					fill: var(--fav-color);
+				}
+			}
+
+			&-watch-later {
+				&:hover {
+					stroke: var(--wl-color);
+				}
+
+				&.checked {
+					fill: var(--wl-color);
+
+					circle {
+						stroke: var(--wl-color);
+					}
+
+					polyline {
+						stroke: #000;
+					}
+				}
+			}
+
 			svg {
 				margin-right: 15px;
+				cursor: pointer;
 			}
 		}
 
