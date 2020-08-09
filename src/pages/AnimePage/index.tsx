@@ -11,6 +11,8 @@ import backgroundImage from '../../assets/img/background/anime.png';
 
 import { useHistory } from '../../hooks/history';
 
+import { useSaved } from '../../hooks/saved';
+
 import {
 	FilterEpisodesList,
 	FilterAnime,
@@ -37,6 +39,12 @@ interface ActiveEpisode {
 
 const AnimePage: React.FunctionComponent = () => {
 	const { addToHistory, history, removeFromHistory } = useHistory();
+	const {
+		favorites,
+		watchLater,
+		toggleFavorites,
+		toggleWatchLater,
+	} = useSaved();
 
 	const { animeId, episodeId } = useParams<AnimeParams>();
 
@@ -148,8 +156,24 @@ const AnimePage: React.FunctionComponent = () => {
 					<Player {...options} />
 					<div className="episodes__list">
 						<div className="episodes__list--options">
-							<FiHeart size={24} />
-							<FiClock size={24} />
+							<FiHeart
+								size={24}
+								onClick={() => toggleFavorites(animeDescription)}
+								className={`episodes__list--options-favorite ${
+									favorites.find((i) => i.id === animeDescription.id)
+										? 'checked'
+										: ''
+								}`}
+							/>
+							<FiClock
+								size={24}
+								onClick={() => toggleWatchLater(animeDescription)}
+								className={`episodes__list--options-watch-later ${
+									watchLater.find((i) => i.id === animeDescription.id)
+										? 'checked'
+										: ''
+								}`}
+							/>
 						</div>
 						<div className="episodes__list--container">
 							{episodesList &&

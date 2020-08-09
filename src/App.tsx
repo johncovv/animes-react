@@ -11,6 +11,7 @@ import GlobalStyled from './styles/global.styles';
 import Background from './components/Background';
 
 import History from './components/History';
+import Saved from './components/Saved';
 
 import AppProvider from './hooks';
 
@@ -20,6 +21,7 @@ const App: React.FunctionComponent = () => {
 			<AppProvider>
 				<Header />
 				<History />
+				<Saved />
 				<Background>
 					<Routes />
 				</Background>

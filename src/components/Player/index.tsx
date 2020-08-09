@@ -1,6 +1,5 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react';
 
-import { setTimeout } from 'timers';
 import { PlayerContainer, PlayerOptions } from './styles';
 import PlayerTitle from './components/PlayerTitle';
 import PlayPauseButton from './components/PlayPauseButton';
@@ -74,14 +73,6 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 			setCurrentVideo(sources[0]);
 		}
 	}, [sources]);
-
-	useEffect(() => {
-		if (showControls === true) {
-			setTimeout(() => {
-				setShowControls(false);
-			}, 5000);
-		}
-	}, [showControls]);
 
 	useEffect(() => {
 		if (volume === 0) {
@@ -329,7 +320,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				</button>
 
 				<PlayPauseButton
-					className="player__option"
+					className={`player__option ${isLoading ? 'loading' : 'none'}`}
 					isPlaying={isPlaying}
 					onClick={handlePlayPause}
 				/>
