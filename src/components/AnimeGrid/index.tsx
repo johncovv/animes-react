@@ -1,14 +1,11 @@
 /* eslint-disable react/require-default-props */
 import React, { useCallback } from 'react';
-
 import { FiEye } from 'react-icons/fi';
-
 import { AiFillPlayCircle } from 'react-icons/ai';
 
 import { Content, Item, ItemLink, Favorite, WatchLater } from './styles';
-
 import scaleImage from '../../assets/img/thumb-grid-proportion.png';
-
+import thumbNotFound from '../../assets/img/thumb-not-found.png';
 import { useSaved } from '../../hooks/saved';
 
 interface AnimeGridProps {
@@ -35,13 +32,21 @@ const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 
 	const handleClosePopup = useCallback(() => {
 		if (isPopup) {
-			const popup = window.document.querySelector('.popup-saved');
+			const popup = window.document.querySelector('.popup__saved');
+			const svg = window.document.querySelector('header .popup__saved-icon');
 
-			if (popup) {
-				popup.classList.toggle('hidden');
+			if (popup && svg) {
+				popup.classList.add('hidden');
+				svg.classList.remove('popup__active');
 			}
 		}
 	}, [isPopup]);
+
+	const handleThumbnailError = useCallback((e) => {
+		const element = e.target as HTMLImageElement;
+
+		element.src = thumbNotFound;
+	}, []);
 
 	return (
 		<div>
@@ -71,7 +76,12 @@ const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 									className="grid__item--thumb"
 									style={{ backgroundImage: `url(${item.thumbnail})` }}
 								/>
-								<img className="grid__scale--thumb" src={scaleImage} alt="" />
+								<img
+									className="grid__scale--thumb"
+									src={scaleImage}
+									onError={(e) => handleThumbnailError(e)}
+									alt={`${item.title} thumbnail`}
+								/>
 								<p className="grid__item--title">{item.title}</p>
 								<div className="grid__item-hover">
 									<div className="grid__item--title-popup">

@@ -1,32 +1,28 @@
 import styled, { css } from 'styled-components';
-
 import { Link } from 'react-router-dom';
-
 import { FiHeart, FiClock } from 'react-icons/fi';
-
 import { IconBaseProps } from 'react-icons';
 
 export const Content = styled.div`
 	display: grid;
 	grid-template-columns: repeat(5, minmax(0, 1fr));
-	grid-gap: 2rem;
+	grid-gap: 25px;
+
+	@media only screen and (max-width: 1240px) {
+		grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+		grid-gap: 20px !important;
+	}
 
 	@media only screen and (max-width: 900px) and (orientation: landscape) {
 		grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
 	}
 
-	@media only screen and (max-width: 1239px) {
-		grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-		grid-gap: 1.5rem;
-	}
-
-	@media only screen and (max-width: 768px) {
+	@media only screen and (max-width: 767px) {
 		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 	}
 
-	@media only screen and (max-width: 450px) {
+	@media only screen and (max-width: 480px) {
 		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-		grid-gap: 1rem;
 	}
 `;
 
@@ -165,6 +161,19 @@ export const ItemLink = styled(Link)`
 		}
 	}
 
+	@media only screen and (max-width: 1024px) {
+		.grid__item--title {
+			font-size: 14px !important;
+		}
+
+		.grid__item-hover {
+			font-size: 14px !important;
+			.grid__item--views {
+				font-size: 12px !important;
+			}
+		}
+	}
+
 	.grid__item-hover {
 		transition: transform 0.3s ease-in-out;
 		transform: translateY(calc(100% + 25px));
@@ -212,14 +221,6 @@ export const ItemLink = styled(Link)`
 
 			svg {
 				margin-right: 0.5rem;
-			}
-		}
-
-		@media only screen and (max-width: 767px) {
-			font-size: 14px !important;
-
-			.grid__item--views {
-				font-size: 12px !important;
 			}
 		}
 	}

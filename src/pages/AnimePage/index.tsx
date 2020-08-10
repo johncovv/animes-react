@@ -2,16 +2,19 @@ import React, { useEffect, useState, useCallback } from 'react';
 
 import { useParams } from 'react-router-dom';
 
+import { FaSortAmountDown, FaSortAmountDownAlt } from 'react-icons/fa';
 import { FiHeart, FiClock } from 'react-icons/fi';
-
 import { BsFillEyeSlashFill } from 'react-icons/bs';
 
 import Player from '../../components/Player';
 import backgroundImage from '../../assets/img/background/anime.png';
+import descriptionThumbnailError from '../../assets/img/thumb-not-found.png';
 
 import { useHistory } from '../../hooks/history';
 
 import { useSaved } from '../../hooks/saved';
+
+import FilterEpisodeTitle from '../../utils/filter-episode-title';
 
 import {
 	FilterEpisodesList,
@@ -35,6 +38,10 @@ interface AnimeParams {
 interface ActiveEpisode {
 	id: number | undefined;
 	title: string | undefined;
+}
+
+interface EspisodesListOrderType {
+	isReverse: boolean;
 }
 
 const AnimePage: React.FunctionComponent = () => {
@@ -61,6 +68,8 @@ const AnimePage: React.FunctionComponent = () => {
 		id: undefined,
 		title: undefined,
 	});
+
+	const [isReverse, setIsReverse] = useState(false);
 
 	const handleToggleHistory = useCallback(
 		(id: number, title: string, currentTime: number) => {
@@ -113,15 +122,15 @@ const AnimePage: React.FunctionComponent = () => {
 
 				const filtered = await FilterAnime(response.data.value);
 
-				setAnimeDescription(filtered[0]);
+				await setAnimeDescription(filtered[0]);
+
+				episodesListRequest();
 			} catch (err) {
 				window.console.log(err);
 			}
 		};
 
 		animeDescriptionRequest();
-
-		episodesListRequest();
 	}, [animeId]);
 
 	useEffect(() => {
@@ -140,6 +149,26 @@ const AnimePage: React.FunctionComponent = () => {
 		requestOnLoadEpisode();
 	}, [episodeId, handleEpisodeRequest, episodesList]);
 
+	const handleSortEpisodesList = useCallback(() => {
+		setIsReverse(!isReverse);
+		setEpisodesList(episodesList.reverse());
+	}, [setIsReverse, isReverse, episodesList, setEpisodesList]);
+
+	const handleEpisodeThumbnailError = useCallback((e) => {
+		const element = e.target as HTMLImageElement;
+
+		const thumbNotFound =
+			'https://placeholder.pics/svg/320x200/000000-000000/FFFFFF/thumbnail%20not%20found';
+
+		element.src = thumbNotFound;
+	}, []);
+
+	const hadleDescriptionThumbnailError = useCallback((e) => {
+		const element = e.target as HTMLImageElement;
+
+		element.src = descriptionThumbnailError;
+	}, []);
+
 	const options = {
 		poster: playerPoster,
 		autoplay: true,
@@ -156,28 +185,46 @@ const AnimePage: React.FunctionComponent = () => {
 					<Player {...options} />
 					<div className="episodes__list">
 						<div className="episodes__list--options">
-							<FiHeart
-								size={24}
-								onClick={() => toggleFavorites(animeDescription)}
-								className={`episodes__list--options-favorite ${
-									favorites.find((i) => i.id === animeDescription.id)
-										? 'checked'
-										: ''
-								}`}
-							/>
-							<FiClock
-								size={24}
-								onClick={() => toggleWatchLater(animeDescription)}
-								className={`episodes__list--options-watch-later ${
-									watchLater.find((i) => i.id === animeDescription.id)
-										? 'checked'
-										: ''
-								}`}
-							/>
+							<div className="episodes__list--options-left">
+								{!isReverse ? (
+									<FaSortAmountDown
+										size={24}
+										onClick={handleSortEpisodesList}
+										className="episodes__list--options-sort"
+									/>
+								) : (
+									<FaSortAmountDownAlt
+										size={24}
+										onClick={handleSortEpisodesList}
+										className="episodes__list--options-sort"
+									/>
+								)}
+							</div>
+
+							<div className="episodes__list--options-right">
+								<FiHeart
+									size={24}
+									onClick={() => toggleFavorites(animeDescription)}
+									className={`episodes__list--options-favorite ${
+										favorites.find((i) => i.id === animeDescription.id)
+											? 'checked'
+											: ''
+									}`}
+								/>
+								<FiClock
+									size={24}
+									onClick={() => toggleWatchLater(animeDescription)}
+									className={`episodes__list--options-watch-later ${
+										watchLater.find((i) => i.id === animeDescription.id)
+											? 'checked'
+											: ''
+									}`}
+								/>
+							</div>
 						</div>
 						<div className="episodes__list--container">
 							{episodesList &&
-								episodesList.map(({ id, title }) => (
+								episodesList.map(({ id, title }, index, arr) => (
 									<button
 										type="button"
 										key={id}
@@ -201,12 +248,23 @@ const AnimePage: React.FunctionComponent = () => {
 												/>
 											</span>
 											<img
+												data-id={id}
+												className="episode-thumbnail"
 												src={`http://thumb.zetai.info/${id}.jpg`}
+												onError={(e) => handleEpisodeThumbnailError(e)}
 												alt={`${title} thumbnail`}
 											/>
 										</div>
 										<div className="titles-container">
-											<p className="title">{title}</p>
+											<p className="title">
+												{FilterEpisodeTitle({
+													index,
+													animeTitle: animeDescription.title,
+													episodeTitle: title,
+													genres: animeDescription.genres,
+													total: !isReverse ? arr.length : undefined,
+												})}
+											</p>
 											<p className="anime-title">{animeDescription.title}</p>
 										</div>
 									</button>
@@ -221,6 +279,7 @@ const AnimePage: React.FunctionComponent = () => {
 								<div className="description__poster--background">
 									<img
 										src={animeDescription.thumbnail}
+										onError={(e) => hadleDescriptionThumbnailError(e)}
 										alt={`${animeDescription.title?.toLowerCase()} thumbnail`}
 									/>
 								</div>

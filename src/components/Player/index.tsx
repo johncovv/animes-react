@@ -37,6 +37,10 @@ interface PlayerProps {
 	sources: ApiRequest.EpiOption[];
 }
 
+interface StorageVolume {
+	volume: number;
+}
+
 const Player: React.FunctionComponent<PlayerProps> = ({
 	poster,
 	episode,
@@ -61,7 +65,17 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 	const [resoPopupOpen, setResoPopupOpen] = useState(false);
 	const [timePopup, setTimePopup] = useState('00:00:00');
 	const [timePopupLocation, setTimePopupLocation] = useState(0);
-	const [volume, setVolume] = useState(100);
+	const [volume, setVolume] = useState(() => {
+		const storageVolume = localStorage.getItem('@ReactVideoPlayer:volume');
+
+		if (storageVolume) {
+			const parsed: StorageVolume = JSON.parse(storageVolume);
+
+			return parsed.volume;
+		}
+
+		return 100;
+	});
 	const [pipStatus, setPipStatus] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [volumeIcon, setVolumeIcon] = useState('max');
@@ -197,16 +211,28 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		if (element && video) {
 			video.volume = parseInt(element.value, 10) / 100;
 			setVolume(parseInt(element.value, 10));
+			localStorage.setItem(
+				'@ReactVideoPlayer:volume',
+				JSON.stringify({ volume: parseInt(element.value, 10) }),
+			);
 		}
 	}, []);
 
 	const handleVolumeButton = useCallback(() => {
 		const video = videoElement.current;
 
+		const storageVolume = localStorage.getItem('@ReactVideoPlayer:volume');
+
+		let parsed: StorageVolume = { volume: 0.5 };
+
+		if (storageVolume) {
+			parsed = JSON.parse(storageVolume);
+		}
+
 		if (video)
 			if (volume === 0) {
-				video.volume = 0.5;
-				setVolume(50);
+				video.volume = parsed.volume / 100;
+				setVolume(parsed.volume);
 			} else {
 				video.volume = 0;
 				setVolume(0);

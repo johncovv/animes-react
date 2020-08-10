@@ -2,25 +2,34 @@ import styled from 'styled-components';
 
 export const Content = styled.div`
 	position: fixed;
-	z-index: 1000;
-	top: 70px;
+	z-index: 700;
+	bottom: 0;
 	left: 0;
-	right: 0%;
-	min-height: 100%;
+	right: 0;
 	background: rgba(0, 0, 0, 0.7);
 	backdrop-filter: blur(2px);
 	transition: opacity 0.2s ease-in-out;
+	height: calc(100vh - 70px);
 
-	&.hidden {
-		opacity: 0;
-		pointer-events: none;
+	@media only screen and (max-width: 767px) {
+		height: calc(100vh - 50px) !important;
+		top: 0 !important;
+		bottom: auto !important;
+
+		.popup__container {
+			padding: 0 !important;
+
+			.popup__items--container {
+				padding: 20px !important;
+			}
+		}
 	}
 
 	.popup__container {
+		height: 100%;
 		max-width: 1465px;
-		padding: 25px;
 		margin: 0 auto;
-		height: calc(100vh - 70px);
+		padding: 25px;
 
 		display: flex;
 		justify-content: center;
@@ -33,18 +42,27 @@ export const Content = styled.div`
 				rgba(31, 31, 31, 0) 100%
 			);
 			background-color: var(--secondary-bg-color);
-			border-radius: var(--rounded);
+
+			@media only screen and (min-width: 768px) {
+				border-radius: var(--rounded);
+			}
+
 			width: 100%;
 			height: 100%;
 
 			overflow-y: auto;
 
 			.popup__items--container {
-				height: 100%;
-				padding: 25px;
+				min-height: 100%;
 				display: flex;
 				flex-flow: column nowrap;
+				padding: 25px;
 			}
 		}
+	}
+
+	&.hidden {
+		opacity: 0;
+		pointer-events: none;
 	}
 `;
