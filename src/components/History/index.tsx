@@ -27,7 +27,7 @@ const History: React.FunctionComponent = () => {
 		<Popup className="history">
 			<Title className="history-title">Histórico</Title>
 			{history &&
-				history.reverse().map(({ id, animeId, title, currentTime }) => (
+				history.map(({ id, animeId, title, currentTime }) => (
 					<HistoryItem key={id} className="history__item">
 						<Link
 							className="history__item--link"

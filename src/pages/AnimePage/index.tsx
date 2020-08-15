@@ -71,7 +71,7 @@ const AnimePage: React.FunctionComponent = () => {
 
 	const [isReverse, setIsReverse] = useState(false);
 
-	const handleToggleHistory = useCallback(
+	const handleAddToHistory = useCallback(
 		(id: number, title: string, currentTime: number) => {
 			addToHistory({
 				id,
@@ -102,52 +102,73 @@ const AnimePage: React.FunctionComponent = () => {
 	);
 
 	useEffect(() => {
-		const episodesListRequest = async (): Promise<void> => {
-			try {
-				const response = await api.get(`/api/episodioexes/${animeId}`);
+		let isMounted = true;
 
-				const filtered = await FilterEpisodesList(response.data);
+		if (isMounted) {
+			const episodesListRequest = async (): Promise<void> => {
+				try {
+					const response = await api.get(`/api/episodioexes/${animeId}`);
 
-				setEpisodesList((state) => [...state, ...filtered]);
-			} catch (err) {
-				window.console.log(err);
-			}
+					const filtered = await FilterEpisodesList(response.data);
+
+					setEpisodesList((state) => [...state, ...filtered]);
+				} catch (err) {
+					window.console.log(err);
+				}
+			};
+
+			const animeDescriptionRequest = async (): Promise<void> => {
+				try {
+					const response = await api.get(
+						`/odata/Animesdb?$filter=Id eq ${animeId}`,
+					);
+
+					const filtered = await FilterAnime(response.data.value);
+
+					await setAnimeDescription(filtered[0]);
+
+					episodesListRequest();
+				} catch (err) {
+					window.console.log(err);
+				}
+			};
+			animeDescriptionRequest();
+		}
+
+		return () => {
+			isMounted = false;
 		};
-
-		const animeDescriptionRequest = async (): Promise<void> => {
-			try {
-				const response = await api.get(
-					`/odata/Animesdb?$filter=Id eq ${animeId}`,
-				);
-
-				const filtered = await FilterAnime(response.data.value);
-
-				await setAnimeDescription(filtered[0]);
-
-				episodesListRequest();
-			} catch (err) {
-				window.console.log(err);
-			}
-		};
-
-		animeDescriptionRequest();
 	}, [animeId]);
+
+	const findOnEpisodeList = useCallback(
+		(episode: number): ApiRequest.EpiList | undefined => {
+			return episodesList.find((i) => i.id === episode);
+		},
+		[episodesList],
+	);
 
 	useEffect(() => {
 		const requestOnLoadEpisode = async (): Promise<void> => {
 			if (episodeId) {
 				const episode = parseInt(episodeId, 10);
+				if (espideoActive.id === episode) return;
 
-				const getEpisodeTitle = await episodesList.find(
-					(i) => i.id === episode,
-				);
-				if (getEpisodeTitle)
+				const getEpisodeTitle = findOnEpisodeList(episode);
+				if (getEpisodeTitle) {
 					await handleEpisodeRequest(undefined, episode, getEpisodeTitle.title);
+					handleAddToHistory(getEpisodeTitle.id, getEpisodeTitle.title, 0);
+				}
 			}
 		};
 
 		requestOnLoadEpisode();
-	}, [episodeId, handleEpisodeRequest, episodesList]);
+	}, [
+		episodeId,
+		espideoActive,
+		handleEpisodeRequest,
+		handleAddToHistory,
+		findOnEpisodeList,
+	]);
 
 	const handleSortEpisodesList = useCallback(() => {
 		setIsReverse(!isReverse);
@@ -230,7 +251,7 @@ const AnimePage: React.FunctionComponent = () => {
 										key={id}
 										onClick={(e) => {
 											handleEpisodeRequest(e, id, title);
-											handleToggleHistory(id, title, 0);
+											handleAddToHistory(id, title, 0);
 										}}
 										className={`${
 											history.find((i) => i.id === id) ? 'checked' : ''

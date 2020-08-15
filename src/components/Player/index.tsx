@@ -25,6 +25,8 @@ import PictureInPicture from './components/PictureInPicture';
 import Resolution from './components/Resolution';
 import FullScreen from './components/Fullscreen';
 
+import { useHistory } from '../../hooks/history';
+
 interface ActiveEpisode {
 	id: number | undefined;
 	title: string | undefined;
@@ -76,29 +78,34 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 		return 100;
 	});
-	const [pipStatus, setPipStatus] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [volumeIcon, setVolumeIcon] = useState('max');
 	const [volumeMobile, setVolumeMobile] = useState(false);
 	const [showControls, setShowControls] = useState(false);
+	const [pipActive, setPipActive] = useState(false);
+
+	/* HOOKS */
+	const { updateCurrentTime, history } = useHistory();
 
 	useEffect(() => {
 		if (sources && sources?.length > 0) {
-			setCurrentVideo(sources[0]);
+			const source = sources[0];
+			setCurrentVideo(source);
 		}
 	}, [sources]);
 
 	useEffect(() => {
-		if (volume === 0) {
-			setVolumeIcon('off');
-		} else if (volume >= 1 && volume <= 15) {
-			setVolumeIcon('min');
-		} else if (volume >= 16 && volume <= 50) {
-			setVolumeIcon('medium');
-		} else {
-			setVolumeIcon('max');
+		const video = videoElement.current;
+
+		if (video) {
+			video.addEventListener('enterpictureinpicture', () => {
+				setPipActive(true);
+			});
+
+			video.addEventListener('leavepictureinpicture', () => {
+				setPipActive(false);
+			});
 		}
-	}, [volume]);
+	}, []);
 
 	const handleVideoChange = useCallback(() => {
 		const element = videoElement.current;
@@ -133,12 +140,14 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		const progress = progressBarElement.current;
 
 		if (video && progress) {
-			setVideoDuration(video?.duration);
-			setCurrentTime(video?.currentTime);
+			setVideoDuration(video.duration);
+			setCurrentTime(video.currentTime);
+			if (episode.id && video.currentTime && video.currentTime >= 5)
+				updateCurrentTime(episode.id, video.currentTime);
 		}
 
 		handleProgressBarUpdate();
-	}, [handleProgressBarUpdate]);
+	}, [handleProgressBarUpdate, updateCurrentTime, episode]);
 
 	const handleResolutiontitle = useCallback((title: string): string => {
 		return title.split('-')[1];
@@ -178,7 +187,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		handleProgressBarUpdate();
 	}, [handleProgressBarUpdate]);
 
-	const handleProgressBarHover = useCallback(
+	const handlePopupTimeHover = useCallback(
 		(e) => {
 			e.persist();
 
@@ -190,7 +199,9 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 			if (element) {
 				const seconds = (position / element.clientWidth) * videoDuration;
-				const formated = new Date(seconds * 1000).toISOString().substr(11, 8);
+				const formated = new Date((seconds || 0) * 1000)
+					.toISOString()
+					.substr(11, 8);
 
 				const splited = formated.split(':');
 
@@ -244,11 +255,11 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 		if (video && video.readyState >= 2) {
 			if (document.pictureInPictureElement) {
-				setPipStatus(false);
 				document.exitPictureInPicture();
+				setPipActive(false);
 			} else {
-				setPipStatus(true);
 				video.requestPictureInPicture();
+				setPipActive(true);
 			}
 		}
 	}, []);
@@ -289,6 +300,15 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		[showControls],
 	);
 
+	const handleVideoStartLoad = useCallback(() => {
+		const exist = history.find((i) => i.id === episode.id);
+		const element = videoElement.current;
+
+		if (element && exist) {
+			element.currentTime = exist.currentTime;
+		}
+	}, [history, episode]);
+
 	/* DOM COMPONENT */
 	return (
 		<PlayerContainer
@@ -321,7 +341,10 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				poster={
 					episode.id ? `http://thumb.zetai.info/${episode.id}.jpg` : poster
 				}
-				onLoadStart={() => setIsLoading(true)}
+				onLoadStart={() => {
+					handleVideoStartLoad();
+					setIsLoading(true);
+				}}
 				onWaiting={() => setIsLoading(true)}
 				onCanPlay={() => setIsLoading(false)}
 			/>
@@ -358,7 +381,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 						max={videoDuration || 0}
 						value={currentTime}
 						onChange={handleManualUpdate}
-						onMouseMove={handleProgressBarHover}
+						onMouseMove={handlePopupTimeHover}
 						data-width={`${progressBarWidth}%`}
 					/>
 					<ProgressBarBackground className="player__range--background" />
@@ -382,15 +405,15 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				<>
 					<VolumeContainer className="player__option">
 						<VolumeIconMobile
-							className={`player__volume--icon player__volume--${volumeIcon}`}
 							volumeStatus={volume}
 							onClick={handleVolumeMobile}
 							isActive={volumeMobile}
+							isMuted={volume}
 						/>
 						<VolumeIcon
-							className={`player__volume--icon player__volume--${volumeIcon}`}
 							volumeStatus={volume}
 							onClick={handleVolumeButton}
+							isMuted={volume}
 						/>
 						<VolumeBar
 							className={`player__volume--bar --no-pointer ${
@@ -438,7 +461,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				<PictureInPicture
 					className="player__option"
 					onClick={handlePictureInPicture}
-					isOpen={pipStatus}
+					isOpen={pipActive}
 				/>
 
 				{/* fullscreen */}

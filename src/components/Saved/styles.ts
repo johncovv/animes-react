@@ -53,7 +53,7 @@ export const Content = styled.div`
 	& .favorites {
 		margin-bottom: 3rem;
 
-		&.--title {
+		&--title {
 			margin-bottom: 15px;
 			display: flex;
 			align-items: center;
@@ -65,7 +65,7 @@ export const Content = styled.div`
 	}
 
 	& .watch-later {
-		&.--title {
+		&--title {
 			margin-bottom: 15px;
 			display: flex;
 			align-items: center;

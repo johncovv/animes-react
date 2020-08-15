@@ -5,7 +5,6 @@ import { AiFillPlayCircle } from 'react-icons/ai';
 
 import { Content, Item, ItemLink, Favorite, WatchLater } from './styles';
 import scaleImage from '../../assets/img/thumb-grid-proportion.png';
-import thumbNotFound from '../../assets/img/thumb-not-found.png';
 import { useSaved } from '../../hooks/saved';
 
 interface AnimeGridProps {
@@ -42,12 +41,6 @@ const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 		}
 	}, [isPopup]);
 
-	const handleThumbnailError = useCallback((e) => {
-		const element = e.target as HTMLImageElement;
-
-		element.src = thumbNotFound;
-	}, []);
-
 	return (
 		<div>
 			<Content className={className}>
@@ -79,7 +72,6 @@ const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 								<img
 									className="grid__scale--thumb"
 									src={scaleImage}
-									onError={(e) => handleThumbnailError(e)}
 									alt={`${item.title} thumbnail`}
 								/>
 								<p className="grid__item--title">{item.title}</p>

@@ -52,7 +52,7 @@ const Saved: React.FunctionComponent = () => {
 					);
 					concatToFavorites(favoritesFiltered);
 
-					const watchLaterFiltered = parsed.favorites.filter(
+					const watchLaterFiltered = parsed.watchLater.filter(
 						(a) => !watchLater.find((i) => i.id === a.id),
 					);
 					concatToWatchLater(watchLaterFiltered);
