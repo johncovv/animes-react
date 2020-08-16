@@ -154,7 +154,7 @@ export const HeaderTag = styled.header`
 			}
 
 			svg {
-				&.history__popup {
+				&.popup__history-icon {
 					&:hover,
 					&.popup__active {
 						* {
@@ -164,7 +164,7 @@ export const HeaderTag = styled.header`
 					}
 				}
 
-				&.saves__popup {
+				&.popup__saved-icon {
 					&:hover,
 					&.popup__active {
 						path {

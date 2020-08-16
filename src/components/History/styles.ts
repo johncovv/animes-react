@@ -13,18 +13,40 @@ export const HistoryItem = styled.div`
 	height: 37px;
 	font-size: 18px;
 
+	@media only screen and (max-width: 480px) {
+		font-size: 14px !important;
+
+		.history__item--link {
+			flex-flow: column nowrap !important;
+			align-items: flex-start !important;
+		}
+	}
+
 	&:not(:last-child) {
 		margin-bottom: 15px;
 	}
 
 	.history__item--link {
 		padding-right: 15px;
+		max-width: calc(100% - 25px);
 		color: #fff;
-		flex: 1;
+		flex-grow: 1;
 		display: flex;
 		flex-flow: row nowrap;
 		align-items: center;
 		justify-content: space-between;
+
+		& p:not(.history__item--current-time) {
+			flex-grow: 1;
+			margin-right: 15px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+			@media only screen and (max-width: 480px) {
+				max-width: 100%;
+			}
+		}
 
 		&:hover {
 			color: var(--history-color);

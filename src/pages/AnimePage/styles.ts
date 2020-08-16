@@ -2,11 +2,6 @@ import styled from 'styled-components';
 
 import posterBackground from '../../assets/img/poster-background.png';
 
-export const Title = styled.p`
-	font-size: 20px;
-	margin-bottom: 10px;
-`;
-
 export const Content = styled.div``;
 
 export const Description = styled.div`
@@ -178,8 +173,17 @@ export const PlayerContainer = styled.div`
 			height: 45px;
 			display: flex;
 			flex-flow: row nowrap;
-			justify-content: flex-end;
+			justify-content: space-between;
 			align-items: center;
+			padding: 0 15px;
+
+			svg {
+				cursor: pointer;
+
+				&:not(:last-child) {
+					margin-right: 15px;
+				}
+			}
 
 			&-favorite {
 				&:hover {
@@ -208,11 +212,6 @@ export const PlayerContainer = styled.div`
 						stroke: #000;
 					}
 				}
-			}
-
-			svg {
-				margin-right: 15px;
-				cursor: pointer;
 			}
 		}
 

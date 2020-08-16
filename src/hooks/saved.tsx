@@ -4,7 +4,9 @@ interface SavedContextData {
 	favorites: ApiRequest.Anime[];
 	watchLater: ApiRequest.Anime[];
 	toggleFavorites(data: ApiRequest.Anime): void;
+	concatToFavorites(params: ApiRequest.Anime[]): void;
 	toggleWatchLater(data: ApiRequest.Anime): void;
+	concatToWatchLater(params: ApiRequest.Anime[]): void;
 }
 
 const SavedContext = createContext<SavedContextData>({} as SavedContextData);
@@ -60,6 +62,13 @@ export const SavedProvider: React.FunctionComponent = ({ children }) => {
 		[favorites],
 	);
 
+	const concatToFavorites = (params: ApiRequest.Anime[]): void => {
+		const concat = [...favorites, ...params];
+
+		setFavorites(concat);
+		localStorage.setItem('@AnimesReact:favorites', JSON.stringify(concat));
+	};
+
 	const toggleWatchLater = useCallback(
 		({
 			id,
@@ -94,9 +103,23 @@ export const SavedProvider: React.FunctionComponent = ({ children }) => {
 		[watchLater],
 	);
 
+	const concatToWatchLater = (params: ApiRequest.Anime[]): void => {
+		const concat = [...watchLater, ...params];
+
+		setWatchLater(concat);
+		localStorage.setItem('@AnimesReact:watchLater', JSON.stringify(concat));
+	};
+
 	return (
 		<SavedContext.Provider
-			value={{ favorites, watchLater, toggleFavorites, toggleWatchLater }}
+			value={{
+				favorites,
+				watchLater,
+				toggleFavorites,
+				concatToFavorites,
+				toggleWatchLater,
+				concatToWatchLater,
+			}}
 		>
 			{children}
 		</SavedContext.Provider>

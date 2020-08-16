@@ -1,8 +1,7 @@
-import React, { useState, useCallback, useEffect } from 'react';
-
+import React, { useState, useCallback } from 'react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
-
 import { FiHeart, FiArchive, FiSearch, FiMenu } from 'react-icons/fi';
+
 import { HeaderTag } from './styles';
 
 const Header: React.FunctionComponent = () => {
@@ -10,31 +9,6 @@ const Header: React.FunctionComponent = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const history = useHistory();
-
-	const [historyPopup, setHistoryPopup] = useState(false);
-	const [savedPopup, setSavedPopup] = useState(false);
-
-	useEffect(() => {
-		const historyElement = window.document.querySelector('.popup-history');
-
-		if (historyElement)
-			if (historyPopup) {
-				historyElement.classList.remove('hidden');
-			} else {
-				historyElement.classList.add('hidden');
-			}
-	}, [historyPopup]);
-
-	useEffect(() => {
-		const savedElement = window.document.querySelector('.popup-saved');
-
-		if (savedElement)
-			if (savedPopup) {
-				savedElement.classList.remove('hidden');
-			} else {
-				savedElement.classList.add('hidden');
-			}
-	}, [savedPopup]);
 
 	const handleMenuMobile = useCallback(() => {
 		setIsOpen(!isOpen);
@@ -61,13 +35,27 @@ const Header: React.FunctionComponent = () => {
 		[history, searchInput],
 	);
 
-	const handleToggleHistory = useCallback(() => {
-		setHistoryPopup(!historyPopup);
-	}, [historyPopup]);
+	const handleTogglePopup = useCallback((active, disable) => {
+		const popupActive = window.document.querySelector(`.popup__${active}`);
+		const popupDisable = window.document.querySelector(`.popup__${disable}`);
 
-	const handleToggleSaved = useCallback(() => {
-		setSavedPopup(!savedPopup);
-	}, [savedPopup]);
+		const svgActive = window.document.querySelector(
+			`header .popup__${active}-icon`,
+		);
+		const svgDisable = window.document.querySelector(
+			`header .popup__${disable}-icon`,
+		);
+
+		if (popupActive && popupDisable && svgActive && svgDisable) {
+			popupActive.classList.toggle('hidden');
+			svgActive.classList.toggle('popup__active');
+
+			if (!popupActive.classList.contains('hidden')) {
+				popupDisable.classList.add('hidden');
+				svgDisable.classList.remove('popup__active');
+			}
+		}
+	}, []);
 
 	return (
 		<HeaderTag>
@@ -127,19 +115,19 @@ const Header: React.FunctionComponent = () => {
 				</div>
 				<div className="header__buttons">
 					<FiArchive
-						className={`history__popup ${historyPopup ? 'popup__active' : ''}`}
+						className="popup__history-icon"
 						size={24}
 						onClick={() => {
 							handleCloseMenuMobile();
-							handleToggleHistory();
+							handleTogglePopup('history', 'saved');
 						}}
 					/>
 					<FiHeart
-						className={`saves__popup ${savedPopup ? 'popup__active' : ''}`}
+						className="popup__saved-icon"
 						size={24}
 						onClick={() => {
 							handleCloseMenuMobile();
-							handleToggleSaved();
+							handleTogglePopup('saved', 'history');
 						}}
 					/>
 					<FiMenu

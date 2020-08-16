@@ -25,6 +25,9 @@ import PictureInPicture from './components/PictureInPicture';
 import Resolution from './components/Resolution';
 import FullScreen from './components/Fullscreen';
 
+import { useHistory } from '../../hooks/history';
+import { useEspisodesHook } from '../../hooks/episodes';
+
 interface ActiveEpisode {
 	id: number | undefined;
 	title: string | undefined;
@@ -32,16 +35,16 @@ interface ActiveEpisode {
 
 interface PlayerProps {
 	poster: string;
-	episode: ActiveEpisode;
 	autoplay: boolean;
-	sources: ApiRequest.EpiOption[];
+}
+
+interface StorageVolume {
+	volume: number;
 }
 
 const Player: React.FunctionComponent<PlayerProps> = ({
 	poster,
-	episode,
 	autoplay = false,
-	sources,
 }: PlayerProps) => {
 	/* REFS */
 	const videoElement = useRef<HTMLVideoElement>(null);
@@ -55,36 +58,61 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 	const [progressBarWidth, setProgressBarWidth] = useState(0);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [videoDuration, setVideoDuration] = useState(0);
-	const [currentVideo, setCurrentVideo] = useState<ApiRequest.EpiOption>(
-		{} as ApiRequest.EpiOption,
-	);
 	const [resoPopupOpen, setResoPopupOpen] = useState(false);
 	const [timePopup, setTimePopup] = useState('00:00:00');
 	const [timePopupLocation, setTimePopupLocation] = useState(0);
-	const [volume, setVolume] = useState(100);
-	const [pipStatus, setPipStatus] = useState(false);
+	const [volume, setVolume] = useState(() => {
+		const storageVolume = localStorage.getItem('@ReactVideoPlayer:volume');
+
+		if (storageVolume) {
+			const parsed: StorageVolume = JSON.parse(storageVolume);
+
+			return parsed.volume;
+		}
+
+		return 100;
+	});
 	const [isLoading, setIsLoading] = useState(false);
-	const [volumeIcon, setVolumeIcon] = useState('max');
 	const [volumeMobile, setVolumeMobile] = useState(false);
 	const [showControls, setShowControls] = useState(false);
+	const [pipActive, setPipActive] = useState(false);
+
+	/* HOOKS */
+	const { history } = useHistory();
+	const {
+		currentVideo,
+		activeEpisode,
+		episodeResolutions,
+		handleChangeCurrentVideo,
+	} = useEspisodesHook();
 
 	useEffect(() => {
-		if (sources && sources?.length > 0) {
-			setCurrentVideo(sources[0]);
-		}
-	}, [sources]);
+		const video = videoElement.current;
 
-	useEffect(() => {
-		if (volume === 0) {
-			setVolumeIcon('off');
-		} else if (volume >= 1 && volume <= 15) {
-			setVolumeIcon('min');
-		} else if (volume >= 16 && volume <= 50) {
-			setVolumeIcon('medium');
-		} else {
-			setVolumeIcon('max');
+		if (video) {
+			video.volume = volume / 100;
 		}
 	}, [volume]);
+
+	useEffect(() => {
+		if (episodeResolutions.length > 0) {
+			handleChangeCurrentVideo(episodeResolutions[0]);
+		}
+	}, [episodeResolutions, handleChangeCurrentVideo]);
+
+	useEffect(() => {
+		const video = videoElement.current;
+
+		if (video) {
+			video.addEventListener('enterpictureinpicture', () => {
+				setPipActive(true);
+			});
+
+			video.addEventListener('leavepictureinpicture', () => {
+				setPipActive(false);
+			});
+		}
+	}, []);
 
 	const handleVideoChange = useCallback(() => {
 		const element = videoElement.current;
@@ -119,8 +147,8 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		const progress = progressBarElement.current;
 
 		if (video && progress) {
-			setVideoDuration(video?.duration);
-			setCurrentTime(video?.currentTime);
+			setVideoDuration(video.duration);
+			setCurrentTime(video.currentTime);
 		}
 
 		handleProgressBarUpdate();
@@ -137,12 +165,12 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 			if (video) {
 				const time = video.currentTime;
 
-				await setCurrentVideo({ id, title, url });
+				handleChangeCurrentVideo({ id, title, url });
 
 				video.currentTime = time;
 			}
 		},
-		[],
+		[handleChangeCurrentVideo],
 	);
 
 	const handleResoPopup = useCallback(() => {
@@ -164,7 +192,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		handleProgressBarUpdate();
 	}, [handleProgressBarUpdate]);
 
-	const handleProgressBarHover = useCallback(
+	const handlePopupTimeHover = useCallback(
 		(e) => {
 			e.persist();
 
@@ -176,7 +204,9 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 			if (element) {
 				const seconds = (position / element.clientWidth) * videoDuration;
-				const formated = new Date(seconds * 1000).toISOString().substr(11, 8);
+				const formated = new Date((seconds || 0) * 1000)
+					.toISOString()
+					.substr(11, 8);
 
 				const splited = formated.split(':');
 
@@ -197,16 +227,28 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		if (element && video) {
 			video.volume = parseInt(element.value, 10) / 100;
 			setVolume(parseInt(element.value, 10));
+			localStorage.setItem(
+				'@ReactVideoPlayer:volume',
+				JSON.stringify({ volume: parseInt(element.value, 10) }),
+			);
 		}
 	}, []);
 
 	const handleVolumeButton = useCallback(() => {
 		const video = videoElement.current;
 
+		const storageVolume = localStorage.getItem('@ReactVideoPlayer:volume');
+
+		let parsed: StorageVolume = { volume: 0.5 };
+
+		if (storageVolume) {
+			parsed = JSON.parse(storageVolume);
+		}
+
 		if (video)
 			if (volume === 0) {
-				video.volume = 0.5;
-				setVolume(50);
+				video.volume = parsed.volume / 100;
+				setVolume(parsed.volume);
 			} else {
 				video.volume = 0;
 				setVolume(0);
@@ -218,11 +260,11 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 		if (video && video.readyState >= 2) {
 			if (document.pictureInPictureElement) {
-				setPipStatus(false);
 				document.exitPictureInPicture();
+				setPipActive(false);
 			} else {
-				setPipStatus(true);
 				video.requestPictureInPicture();
+				setPipActive(true);
 			}
 		}
 	}, []);
@@ -263,6 +305,15 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		[showControls],
 	);
 
+	const handleVideoStartLoad = useCallback(() => {
+		const exist = history.find((i) => i.id === activeEpisode.id);
+		const element = videoElement.current;
+
+		if (element && exist) {
+			element.currentTime = exist.currentTime;
+		}
+	}, [history, activeEpisode]);
+
 	/* DOM COMPONENT */
 	return (
 		<PlayerContainer
@@ -276,12 +327,12 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				showControls || !isPlaying ? 'show' : 'hidde'
 			}`}
 		>
-			{episode.title && (
+			{activeEpisode.title && (
 				<PlayerTitle
 					className="player__title"
 					onClick={() => handlePlayPause(true)}
 				>
-					{episode.title}
+					{activeEpisode.title}
 				</PlayerTitle>
 			)}
 			<video
@@ -293,9 +344,14 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				onPause={handleVideoChange}
 				onTimeUpdate={handleTimeUpdate}
 				poster={
-					episode.id ? `http://thumb.zetai.info/${episode.id}.jpg` : poster
+					activeEpisode.id
+						? `http://thumb.zetai.info/${activeEpisode.id}.jpg`
+						: poster
 				}
-				onLoadStart={() => setIsLoading(true)}
+				onLoadStart={() => {
+					handleVideoStartLoad();
+					setIsLoading(true);
+				}}
 				onWaiting={() => setIsLoading(true)}
 				onCanPlay={() => setIsLoading(false)}
 			/>
@@ -332,7 +388,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 						max={videoDuration || 0}
 						value={currentTime}
 						onChange={handleManualUpdate}
-						onMouseMove={handleProgressBarHover}
+						onMouseMove={handlePopupTimeHover}
 						data-width={`${progressBarWidth}%`}
 					/>
 					<ProgressBarBackground className="player__range--background" />
@@ -356,15 +412,15 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				<>
 					<VolumeContainer className="player__option">
 						<VolumeIconMobile
-							className={`player__volume--icon player__volume--${volumeIcon}`}
 							volumeStatus={volume}
 							onClick={handleVolumeMobile}
 							isActive={volumeMobile}
+							isMuted={volume}
 						/>
 						<VolumeIcon
-							className={`player__volume--icon player__volume--${volumeIcon}`}
 							volumeStatus={volume}
 							onClick={handleVolumeButton}
+							isMuted={volume}
 						/>
 						<VolumeBar
 							className={`player__volume--bar --no-pointer ${
@@ -392,9 +448,9 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 					onClick={handleResoPopup}
 					currentResolution={currentVideo}
 				>
-					{sources && sources.length > 0 && (
+					{episodeResolutions && episodeResolutions.length > 0 && (
 						<div onMouseLeave={handleCloseResoPopup}>
-							{sources.map(({ id, title, url }) => (
+							{episodeResolutions.map(({ id, title, url }) => (
 								<button
 									type="button"
 									key={id}
@@ -412,7 +468,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				<PictureInPicture
 					className="player__option"
 					onClick={handlePictureInPicture}
-					isOpen={pipStatus}
+					isOpen={pipActive}
 				/>
 
 				{/* fullscreen */}

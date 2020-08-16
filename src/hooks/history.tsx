@@ -11,6 +11,7 @@ interface HistoryContextData {
 	history: HistoryData[];
 	addToHistory(data: HistoryData): void;
 	removeFromHistory(id: number): void;
+	updateCurrentTime(id: number, time: number): void;
 }
 
 const HistoryContext = createContext<HistoryContextData>(
@@ -54,9 +55,28 @@ export const HistoryProvider: React.FunctionComponent = ({ children }) => {
 		[history],
 	);
 
+	const updateCurrentTime = useCallback(
+		(id, time) => {
+			const exist = history.find((i) => i.id === id);
+
+			if (exist) {
+				const filtered = history.filter((y) => y.id !== id);
+
+				const concat = [
+					{ id, title: exist.title, animeId: exist.animeId, currentTime: time },
+					...filtered,
+				] as HistoryData[];
+
+				setHistory(concat);
+				localStorage.setItem('@AnimesReact:history', JSON.stringify(concat));
+			}
+		},
+		[history, setHistory],
+	);
+
 	return (
 		<HistoryContext.Provider
-			value={{ history, addToHistory, removeFromHistory }}
+			value={{ history, addToHistory, removeFromHistory, updateCurrentTime }}
 		>
 			{children}
 		</HistoryContext.Provider>

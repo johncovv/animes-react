@@ -1,13 +1,9 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
-
 import { GoEyeClosed } from 'react-icons/go';
 
 import { useHistory } from '../../hooks/history';
-
 import { HistoryItem, Title } from './styles';
-
 import Popup from '../Popup';
 
 const History: React.FunctionComponent = () => {
@@ -18,12 +14,12 @@ const History: React.FunctionComponent = () => {
 	};
 
 	const handleHiddeHistory = (): void => {
-		const historyPopup = window.document.querySelector('.popup-history');
-		const svg = window.document.querySelector('header .history__popup');
+		const historyPopup = window.document.querySelector('.popup__history');
+		const svg = window.document.querySelector('header .popup__history-icon');
 
 		if (historyPopup && svg) {
-			historyPopup.classList.toggle('hidden');
-			svg.classList.toggle('popup__active');
+			historyPopup.classList.add('hidden');
+			svg.classList.remove('popup__active');
 		}
 	};
 
@@ -31,7 +27,7 @@ const History: React.FunctionComponent = () => {
 		<Popup className="history">
 			<Title className="history-title">Histórico</Title>
 			{history &&
-				history.reverse().map(({ id, animeId, title, currentTime }) => (
+				history.map(({ id, animeId, title, currentTime }) => (
 					<HistoryItem key={id} className="history__item">
 						<Link
 							className="history__item--link"

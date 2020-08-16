@@ -4,9 +4,13 @@ import { HistoryProvider } from './history';
 
 import { SavedProvider } from './saved';
 
+import { EpisodesProvider } from './episodes';
+
 const AppProvider: React.FunctionComponent = ({ children }) => (
 	<HistoryProvider>
-		<SavedProvider>{children}</SavedProvider>
+		<SavedProvider>
+			<EpisodesProvider>{children}</EpisodesProvider>
+		</SavedProvider>
 	</HistoryProvider>
 );
 

@@ -10,8 +10,6 @@ import Button from '../ButtonOption';
 
 import volumeMax from '../../assets/volume/volume-max.svg';
 import volumeOff from '../../assets/volume/volume-off.svg';
-import volumeLow from '../../assets/volume/volume-low.svg';
-import volumeMedium from '../../assets/volume/volume-medium.svg';
 
 /*
 	VOLUME ICON / MOBILE
@@ -21,34 +19,21 @@ interface VolumeAttr {
 	volumeStatus?: number;
 	isActive?: boolean;
 	volumeRange?: number;
+	isMuted?: number;
 }
 
-const Icon = styled(Button)<VolumeAttr>`
-	&.player__volume {
-		&--off {
-			background-image: url(${volumeOff});
-		}
-		&--min {
-			background-image: url(${volumeLow});
-		}
-		&--medium {
-			background-image: url(${volumeMedium});
-		}
-		&--max {
-			background-image: url(${volumeMax});
-		}
-	}
-`;
+const Icon = styled(Button).attrs<VolumeAttr>(({ isMuted }) => ({
+	style: {
+		backgroundImage: `url(${isMuted === 0 ? volumeOff : volumeMax})`,
+	},
+}))<VolumeAttr>``;
 
-export const VolumeIconMobile = styled(Icon).attrs<VolumeAttr>(
-	({ isActive }) => ({
-		className: 'player__volume-mobile',
-		style: {
-			backgroundColor: isActive && 'var(--season-color)',
-			borderRadius: isActive && '5px',
-		},
-	}),
-)<VolumeAttr>`
+export const VolumeIconMobile = styled(Icon)<VolumeAttr>`
+	border-radius: 5px;
+
+	background-color: ${(props) =>
+		props.isActive ? 'var(--season-color)' : 'transparent'};
+
 	@media only screen and (min-width: 768px) {
 		display: none;
 	}

@@ -12,7 +12,7 @@ const Popup: React.FunctionComponent<PopupAttr> = ({
 	className,
 }: PopupAttr) => {
 	return (
-		<Content className={`popup-${className}`}>
+		<Content className={`popup__${className} hidden`}>
 			<div className="popup__container">
 				<div className="popup__container--inner">
 					<div className="popup__items--container">{children}</div>
