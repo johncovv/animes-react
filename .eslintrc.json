@@ -35,8 +35,9 @@
 		"react/jsx-indent-props": ["error", "tab"],
 		"react/jsx-indent": ["error", "tab"],
 		"prettier/prettier": "error",
-		"react-hooks/rules-of-hooks": "error",
-		"react-hooks/exhaustive-deps": "warn",
+		// "react-hooks/rules-of-hooks": "error",
+		// alerta caso esqueça de colocar uma dependencia no array do useEffect e useCallback
+		// "react-hooks/exhaustive-deps": "warn",
 		// enale JSX on .tsx files
 		"react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
 		"@typescript-eslint/explicit-function-return-type": [

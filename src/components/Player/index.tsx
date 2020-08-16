@@ -26,6 +26,7 @@ import Resolution from './components/Resolution';
 import FullScreen from './components/Fullscreen';
 
 import { useHistory } from '../../hooks/history';
+import { useEspisodesHook } from '../../hooks/episodes';
 
 interface ActiveEpisode {
 	id: number | undefined;
@@ -34,9 +35,7 @@ interface ActiveEpisode {
 
 interface PlayerProps {
 	poster: string;
-	episode: ActiveEpisode;
 	autoplay: boolean;
-	sources: ApiRequest.EpiOption[];
 }
 
 interface StorageVolume {
@@ -45,9 +44,7 @@ interface StorageVolume {
 
 const Player: React.FunctionComponent<PlayerProps> = ({
 	poster,
-	episode,
 	autoplay = false,
-	sources,
 }: PlayerProps) => {
 	/* REFS */
 	const videoElement = useRef<HTMLVideoElement>(null);
@@ -61,9 +58,6 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 	const [progressBarWidth, setProgressBarWidth] = useState(0);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [videoDuration, setVideoDuration] = useState(0);
-	const [currentVideo, setCurrentVideo] = useState<ApiRequest.EpiOption>(
-		{} as ApiRequest.EpiOption,
-	);
 	const [resoPopupOpen, setResoPopupOpen] = useState(false);
 	const [timePopup, setTimePopup] = useState('00:00:00');
 	const [timePopupLocation, setTimePopupLocation] = useState(0);
@@ -85,14 +79,26 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 	/* HOOKS */
 	const { history } = useHistory();
+	const {
+		currentVideo,
+		activeEpisode,
+		episodeResolutions,
+		handleChangeCurrentVideo,
+	} = useEspisodesHook();
 
 	useEffect(() => {
-		if (sources && sources?.length > 0) {
-			if (currentVideo.id === undefined) {
-				setCurrentVideo(sources[0]);
-			}
+		const video = videoElement.current;
+
+		if (video) {
+			video.volume = volume / 100;
 		}
-	}, [sources, currentVideo]);
+	}, [volume]);
+
+	useEffect(() => {
+		if (episodeResolutions.length > 0) {
+			handleChangeCurrentVideo(episodeResolutions[0]);
+		}
+	}, [episodeResolutions, handleChangeCurrentVideo]);
 
 	useEffect(() => {
 		const video = videoElement.current;
@@ -159,12 +165,12 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 			if (video) {
 				const time = video.currentTime;
 
-				await setCurrentVideo({ id, title, url });
+				handleChangeCurrentVideo({ id, title, url });
 
 				video.currentTime = time;
 			}
 		},
-		[],
+		[handleChangeCurrentVideo],
 	);
 
 	const handleResoPopup = useCallback(() => {
@@ -300,13 +306,13 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 	);
 
 	const handleVideoStartLoad = useCallback(() => {
-		const exist = history.find((i) => i.id === episode.id);
+		const exist = history.find((i) => i.id === activeEpisode.id);
 		const element = videoElement.current;
 
 		if (element && exist) {
 			element.currentTime = exist.currentTime;
 		}
-	}, [history, episode]);
+	}, [history, activeEpisode]);
 
 	/* DOM COMPONENT */
 	return (
@@ -321,12 +327,12 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				showControls || !isPlaying ? 'show' : 'hidde'
 			}`}
 		>
-			{episode.title && (
+			{activeEpisode.title && (
 				<PlayerTitle
 					className="player__title"
 					onClick={() => handlePlayPause(true)}
 				>
-					{episode.title}
+					{activeEpisode.title}
 				</PlayerTitle>
 			)}
 			<video
@@ -338,7 +344,9 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				onPause={handleVideoChange}
 				onTimeUpdate={handleTimeUpdate}
 				poster={
-					episode.id ? `http://thumb.zetai.info/${episode.id}.jpg` : poster
+					activeEpisode.id
+						? `http://thumb.zetai.info/${activeEpisode.id}.jpg`
+						: poster
 				}
 				onLoadStart={() => {
 					handleVideoStartLoad();
@@ -440,9 +448,9 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 					onClick={handleResoPopup}
 					currentResolution={currentVideo}
 				>
-					{sources && sources.length > 0 && (
+					{episodeResolutions && episodeResolutions.length > 0 && (
 						<div onMouseLeave={handleCloseResoPopup}>
-							{sources.map(({ id, title, url }) => (
+							{episodeResolutions.map(({ id, title, url }) => (
 								<button
 									type="button"
 									key={id}

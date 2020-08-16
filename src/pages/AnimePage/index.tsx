@@ -11,8 +11,8 @@ import backgroundImage from '../../assets/img/background/anime.png';
 import descriptionThumbnailError from '../../assets/img/thumb-not-found.png';
 
 import { useHistory as useHistoryHook } from '../../hooks/history';
-
 import { useSaved } from '../../hooks/saved';
+import { useEspisodesHook } from '../../hooks/episodes';
 
 import FilterEpisodeTitle from '../../utils/filter-episode-title';
 
@@ -57,6 +57,7 @@ const AnimePage: React.FunctionComponent = () => {
 		toggleFavorites,
 		toggleWatchLater,
 	} = useSaved();
+	const { handleChangeEpisode, activeEpisode } = useEspisodesHook();
 
 	const { animeId, episodeId } = useParams<AnimeParams>();
 
@@ -64,15 +65,6 @@ const AnimePage: React.FunctionComponent = () => {
 		{} as ApiRequest.Anime,
 	);
 	const [episodesList, setEpisodesList] = useState<ApiRequest.EpiList[]>([]);
-
-	const [episodeOptions, setEpisodeOptions] = useState<ApiRequest.EpiOption[]>(
-		[],
-	);
-
-	const [episodeActive, setEpisodeActive] = useState<ActiveEpisode>({
-		id: undefined,
-		title: undefined,
-	});
 
 	const [isReverse, setIsReverse] = useState(false);
 
@@ -95,18 +87,17 @@ const AnimePage: React.FunctionComponent = () => {
 		async (event, id: number, title: string) => {
 			if (event) event.preventDefault();
 
-			// request episode options
 			try {
 				const response = await api.get(`/api/episodioexes/links?id=${id}`);
 
 				const filtered = await FilterEpisodeOptions(response.data);
-				setEpisodeOptions([...filtered]);
-				setEpisodeActive({ id, title });
+
+				handleChangeEpisode(id, title, filtered);
 			} catch (err) {
 				window.console.log(err);
 			}
 		},
-		[],
+		[handleChangeEpisode],
 	);
 
 	useEffect(() => {
@@ -159,7 +150,7 @@ const AnimePage: React.FunctionComponent = () => {
 		const requestOnLoadEpisode = async (): Promise<void> => {
 			if (episodeId) {
 				const episode = parseInt(episodeId, 10);
-				if (episodeActive.id === episode) return;
+				if (activeEpisode.id === episode) return;
 
 				const getEpisodeTitle = findOnEpisodeList(episode);
 				if (getEpisodeTitle) {
@@ -179,7 +170,7 @@ const AnimePage: React.FunctionComponent = () => {
 		requestOnLoadEpisode();
 	}, [
 		episodeId,
-		episodeActive,
+		activeEpisode,
 		pathname,
 		push,
 		handleEpisodeRequest,
@@ -207,23 +198,22 @@ const AnimePage: React.FunctionComponent = () => {
 		element.src = descriptionThumbnailError;
 	}, []);
 
-	const options = {
-		poster: playerPoster,
-		autoplay: true,
-		sources: [...episodeOptions],
-		episode: episodeActive,
-	};
-
 	useEffect(() => {
 		const video = document.querySelector('video');
 		if (video) {
 			video.ontimeupdate = () => {
-				if (video.currentTime > 5 && episodeActive.id !== undefined) {
-					updateCurrentTime(episodeActive.id, video.currentTime);
+				if (activeEpisode.id === undefined) return;
+				if (video.currentTime > 5) {
+					updateCurrentTime(activeEpisode.id, video.currentTime);
 				}
 			};
 		}
-	}, [episodeActive, updateCurrentTime]);
+	}, [activeEpisode, updateCurrentTime]);
+
+	const options = {
+		poster: playerPoster,
+		autoplay: true,
+	};
 
 	return (
 		<>
@@ -291,7 +281,10 @@ const AnimePage: React.FunctionComponent = () => {
 											>
 												<BsFillEyeSlashFill
 													size={25}
-													onClick={() => removeFromHistory(id)}
+													onClick={(e) => {
+														e.stopPropagation();
+														removeFromHistory(id);
+													}}
 												/>
 											</span>
 											<img
