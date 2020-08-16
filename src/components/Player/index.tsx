@@ -84,14 +84,15 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 	const [pipActive, setPipActive] = useState(false);
 
 	/* HOOKS */
-	const { updateCurrentTime, history } = useHistory();
+	const { history } = useHistory();
 
 	useEffect(() => {
 		if (sources && sources?.length > 0) {
-			const source = sources[0];
-			setCurrentVideo(source);
+			if (currentVideo.id === undefined) {
+				setCurrentVideo(sources[0]);
+			}
 		}
-	}, [sources]);
+	}, [sources, currentVideo]);
 
 	useEffect(() => {
 		const video = videoElement.current;
@@ -142,12 +143,10 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		if (video && progress) {
 			setVideoDuration(video.duration);
 			setCurrentTime(video.currentTime);
-			if (episode.id && video.currentTime && video.currentTime >= 5)
-				updateCurrentTime(episode.id, video.currentTime);
 		}
 
 		handleProgressBarUpdate();
-	}, [handleProgressBarUpdate, updateCurrentTime, episode]);
+	}, [handleProgressBarUpdate]);
 
 	const handleResolutiontitle = useCallback((title: string): string => {
 		return title.split('-')[1];

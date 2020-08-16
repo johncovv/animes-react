@@ -2,11 +2,6 @@ import styled from 'styled-components';
 
 import posterBackground from '../../assets/img/poster-background.png';
 
-export const Title = styled.p`
-	font-size: 20px;
-	margin-bottom: 10px;
-`;
-
 export const Content = styled.div``;
 
 export const Description = styled.div`

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 
 import { FaSortAmountDown, FaSortAmountDownAlt } from 'react-icons/fa';
 import { FiHeart, FiClock } from 'react-icons/fi';
@@ -10,7 +10,7 @@ import Player from '../../components/Player';
 import backgroundImage from '../../assets/img/background/anime.png';
 import descriptionThumbnailError from '../../assets/img/thumb-not-found.png';
 
-import { useHistory } from '../../hooks/history';
+import { useHistory as useHistoryHook } from '../../hooks/history';
 
 import { useSaved } from '../../hooks/saved';
 
@@ -24,7 +24,7 @@ import {
 
 import api from '../../services/api.client';
 
-import { Title, Content, Description, PlayerContainer } from './styles';
+import { Content, Description, PlayerContainer } from './styles';
 
 import playerPoster from '../../assets/img/background/player2.png';
 
@@ -45,7 +45,12 @@ interface EspisodesListOrderType {
 }
 
 const AnimePage: React.FunctionComponent = () => {
-	const { addToHistory, history, removeFromHistory } = useHistory();
+	const {
+		addToHistory,
+		history,
+		removeFromHistory,
+		updateCurrentTime,
+	} = useHistoryHook();
 	const {
 		favorites,
 		watchLater,
@@ -64,12 +69,15 @@ const AnimePage: React.FunctionComponent = () => {
 		[],
 	);
 
-	const [espideoActive, setEpisodeActive] = useState<ActiveEpisode>({
+	const [episodeActive, setEpisodeActive] = useState<ActiveEpisode>({
 		id: undefined,
 		title: undefined,
 	});
 
 	const [isReverse, setIsReverse] = useState(false);
+
+	const { pathname } = useLocation();
+	const { push } = useHistory();
 
 	const handleAddToHistory = useCallback(
 		(id: number, title: string, currentTime: number) => {
@@ -111,7 +119,7 @@ const AnimePage: React.FunctionComponent = () => {
 
 					const filtered = await FilterEpisodesList(response.data);
 
-					setEpisodesList((state) => [...state, ...filtered]);
+					setEpisodesList(filtered);
 				} catch (err) {
 					window.console.log(err);
 				}
@@ -151,12 +159,19 @@ const AnimePage: React.FunctionComponent = () => {
 		const requestOnLoadEpisode = async (): Promise<void> => {
 			if (episodeId) {
 				const episode = parseInt(episodeId, 10);
-				if (espideoActive.id === episode) return;
+				if (episodeActive.id === episode) return;
 
 				const getEpisodeTitle = findOnEpisodeList(episode);
 				if (getEpisodeTitle) {
 					await handleEpisodeRequest(undefined, episode, getEpisodeTitle.title);
 					handleAddToHistory(getEpisodeTitle.id, getEpisodeTitle.title, 0);
+
+					const pathSplited = pathname.split('/');
+					if (pathSplited) {
+						pathSplited.pop();
+
+						push(pathSplited.join('/'));
+					}
 				}
 			}
 		};
@@ -164,7 +179,9 @@ const AnimePage: React.FunctionComponent = () => {
 		requestOnLoadEpisode();
 	}, [
 		episodeId,
-		espideoActive,
+		episodeActive,
+		pathname,
+		push,
 		handleEpisodeRequest,
 		handleAddToHistory,
 		findOnEpisodeList,
@@ -194,13 +211,22 @@ const AnimePage: React.FunctionComponent = () => {
 		poster: playerPoster,
 		autoplay: true,
 		sources: [...episodeOptions],
-		episode: espideoActive,
+		episode: episodeActive,
 	};
+
+	useEffect(() => {
+		const video = document.querySelector('video');
+		if (video) {
+			video.ontimeupdate = () => {
+				if (video.currentTime > 5 && episodeActive.id !== undefined) {
+					updateCurrentTime(episodeActive.id, video.currentTime);
+				}
+			};
+		}
+	}, [episodeActive, updateCurrentTime]);
 
 	return (
 		<>
-			<Title>{animeDescription.title}</Title>
-
 			<Content>
 				<PlayerContainer>
 					<Player {...options} />
