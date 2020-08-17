@@ -13,8 +13,4 @@ export default createGlobalStyle<RecentsAttr>`
 	.primary__background {
 		background-image: url(${(props) => props.backgroundImage});
 	}
-
-	::-webkit-scrollbar-thumb {
-		background-color: var(--${(props) => props.varRoot}-color);
-	}
 `;

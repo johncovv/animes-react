@@ -1,5 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
+import { lighten } from 'polished';
+
 export default createGlobalStyle`
 	:root {
 		--history-color: #48BB78;
@@ -56,7 +58,7 @@ export default createGlobalStyle`
 
 	/* scrollbar */
 	::-webkit-scrollbar {
-		width: 10px;
+		width: 12px;
 
 		@media only screen and (max-width: 767px) {
 			width: 5px !important;
@@ -64,6 +66,10 @@ export default createGlobalStyle`
 	}
 
 	::-webkit-scrollbar-thumb {
-		border-radius: 50px;
+		background-color: #2d2d2d;
+
+		&:hover {
+			background-color: ${lighten(0.05, '#2d2d2d')};
+		}
 	}
 `;

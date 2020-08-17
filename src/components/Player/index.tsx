@@ -89,6 +89,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		activeEpisode,
 		episodeResolutions,
 		handleChangeCurrentVideo,
+		handleClearEpisodeHookData,
 	} = useEspisodesHook();
 
 	useEffect(() => {
@@ -104,6 +105,12 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 			handleChangeCurrentVideo(episodeResolutions[0]);
 		}
 	}, [episodeResolutions, handleChangeCurrentVideo]);
+
+	useEffect(() => {
+		return () => {
+			handleClearEpisodeHookData();
+		};
+	}, [handleClearEpisodeHookData]);
 
 	useEffect(() => {
 		const video = videoElement.current;
