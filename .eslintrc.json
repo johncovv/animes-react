@@ -28,6 +28,7 @@
 				"exceptions": [""]
 			}
 		],
+		"react/require-default-props": "off",
 		"jsx-a11y/media-has-caption": "off",
 		"react/prop-types": [2, { "ignore": ["children"] }],
 		"@typescript-eslint/ban-types": "off",
@@ -37,7 +38,7 @@
 		"prettier/prettier": "error",
 		// "react-hooks/rules-of-hooks": "error",
 		// alerta caso esqueça de colocar uma dependencia no array do useEffect e useCallback
-		// "react-hooks/exhaustive-deps": "warn",
+		"react-hooks/exhaustive-deps": "warn",
 		// enale JSX on .tsx files
 		"react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
 		"@typescript-eslint/explicit-function-return-type": [

@@ -34,10 +34,11 @@ export const InputRange = styled.input`
 
 		& ~ .player__range--background,
 		& ~ .player__range--current,
+		& ~ .player__range--buffering,
 		& ~ .player__bar--loading,
 		&::-webkit-slider-thumb,
 		&::after {
-			transition: all 0.2s;
+			transition: height 0.2s;
 			height: 10px;
 		}
 
@@ -63,7 +64,6 @@ export const InputRangeCurrent = styled.div`
 	top: 50%;
 	transform: translateY(-50%);
 	left: 0;
-	width: 50px;
 	height: 5px;
 	z-index: 8;
 

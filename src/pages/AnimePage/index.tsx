@@ -213,6 +213,7 @@ const AnimePage: React.FunctionComponent = () => {
 	const options = {
 		poster: playerPoster,
 		autoplay: true,
+		loop: true,
 	};
 
 	return (

@@ -33,6 +33,19 @@ export const ProgressBarCurrent = styled(InputRangeCurrent).attrs<
 
 export const ProgressBarBackground = styled(InputRangeBackground)``;
 
+export const BufferedBar = styled.div`
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	left: 0;
+	height: 5px;
+	z-index: 2;
+
+	background: rgba(255, 255, 255, 0.4);
+
+	border-radius: 50px;
+`;
+
 interface ProgressBarLoadingAttr {
 	isLoading: boolean;
 }
