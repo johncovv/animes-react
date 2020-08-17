@@ -19,14 +19,17 @@ export default ({
 		return `Parte - ${total ? total - index : index + 1}`;
 	}
 
-	let title = episodeTitle.replace(new RegExp(animeTitle, 'gi'), '');
-
-	title = title.replace(/-/gi, '');
-	title = title.replace(/episódio|episodio/gi, 'Episódio - ');
-
-	if (!/Episódio/gi.test(title)) {
-		title = `Episódio - ${title}`;
+	if (
+		/especial/i.test(animeTitle) ||
+		splitedGenres.some((e) => /especial/i.test(e))
+	) {
+		return `Especial - ${total ? total - index : index + 1}`;
 	}
 
-	return title;
+	const episodeNumber = episodeTitle
+		.split(/([0-9]+)/)
+		.filter(Number)
+		.slice(-1)[0];
+
+	return `Episódio - ${episodeNumber}`;
 };

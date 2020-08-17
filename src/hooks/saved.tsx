@@ -1,5 +1,8 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
+import api from '../services/api.client';
+import { FilterAnime } from '../utils/filter-request-data';
+
 interface SavedContextData {
 	favorites: ApiRequest.Anime[];
 	watchLater: ApiRequest.Anime[];
@@ -29,26 +32,25 @@ export const SavedProvider: React.FunctionComponent = ({ children }) => {
 	});
 
 	const toggleFavorites = useCallback(
-		({
-			id,
-			title,
-			description,
-			thumbnail,
-			status,
-			genres,
-			views,
-			year,
-		}: ApiRequest.Anime) => {
+		async ({ id }: ApiRequest.Anime) => {
 			const exist = favorites.find((i) => i.id === id);
 
 			if (!exist) {
-				const concat = [
-					...favorites,
-					{ id, title, thumbnail, description, genres, status, views, year },
-				];
+				try {
+					const response = await api.get(`/odata/Animesdb?$filter=Id eq ${id}`);
 
-				setFavorites(concat);
-				localStorage.setItem('@AnimesReact:favorites', JSON.stringify(concat));
+					const filtered = await FilterAnime(response.data.value);
+
+					const concat = [...favorites, filtered[0]];
+
+					setFavorites(concat);
+					localStorage.setItem(
+						'@AnimesReact:favorites',
+						JSON.stringify(concat),
+					);
+				} catch (err) {
+					window.console.log(err);
+				}
 			} else {
 				const filtered = favorites.filter((y) => y.id !== id);
 
@@ -70,26 +72,25 @@ export const SavedProvider: React.FunctionComponent = ({ children }) => {
 	};
 
 	const toggleWatchLater = useCallback(
-		({
-			id,
-			title,
-			thumbnail,
-			description,
-			genres,
-			status,
-			views,
-			year,
-		}: ApiRequest.Anime) => {
+		async ({ id }: ApiRequest.Anime) => {
 			const exist = watchLater.find((i) => i.id === id);
 
 			if (!exist) {
-				const concat = [
-					...watchLater,
-					{ id, title, thumbnail, description, genres, status, views, year },
-				];
+				try {
+					const response = await api.get(`/odata/Animesdb?$filter=Id eq ${id}`);
 
-				setWatchLater(concat);
-				localStorage.setItem('@AnimesReact:watchLater', JSON.stringify(concat));
+					const filtered = await FilterAnime(response.data.value);
+
+					const concat = [...watchLater, filtered[0]];
+
+					setWatchLater(concat);
+					localStorage.setItem(
+						'@AnimesReact:watchLater',
+						JSON.stringify(concat),
+					);
+				} catch (err) {
+					window.console.log(err);
+				}
 			} else {
 				const filtered = watchLater.filter((y) => y.id !== id);
 
