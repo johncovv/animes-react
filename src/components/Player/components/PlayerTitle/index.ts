@@ -12,7 +12,7 @@ const PlayerTitle = styled.div`
 	padding: 10px;
 
 	transform: translateY(-100%);
-	transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+	transition: transform 0.2s ease-in-out;
 
 	p {
 		width: 100%;
@@ -31,6 +31,8 @@ const PlayerTitle = styled.div`
 		height: 120px;
 		z-index: -1;
 		pointer-events: none;
+		opacity: 0;
+		transition: opacity 0.2s ease-in-out;
 		background-image: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.6));
 	}
 `;
