@@ -7,7 +7,13 @@ const PlayCircle = styled(AiFillPlayCircle)`
 	width: 50px;
 	height: 50px;
 	z-index: 100;
-	transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.1s ease-in-out;
+	cursor: pointer;
+
+	&.hidde {
+		opacity: 0;
+		pointer-events: none;
+	}
 
 	filter: drop-shadow(3px 5px 5px rgba(0, 0, 0, 0.4));
 `;

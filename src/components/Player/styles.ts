@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const PlayerContainer = styled.div<Player.GlobalAttr>`
 	position: relative;
@@ -14,7 +14,7 @@ export const PlayerContainer = styled.div<Player.GlobalAttr>`
 		border-radius: 5px;
 		transition: background 0.2s;
 
-		&:hover {
+		&:hover:not(.--no-hover) {
 			background: var(--season-color);
 		}
 	}
@@ -30,26 +30,21 @@ export const PlayerContainer = styled.div<Player.GlobalAttr>`
 		.player__controls,
 		.player__title {
 			transform: translateY(0%);
+			&::after {
+				opacity: 1;
+			}
 		}
-	}
-
-	.player__play-circle {
-		${({ isPlaying }) => css`
-			opacity: ${isPlaying ? '0' : '1'};
-			cursor: ${isPlaying ? 'auto' : 'pointer'};
-		`}
 	}
 `;
 
 export const PlayerOptions = styled.div`
-	background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.75), transparent);
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	right: 0;
 
-	padding: 80px 5px 5px;
-	height: 120px;
+	padding: 5px;
+	height: 40px;
 
 	display: flex;
 	justify-content: space-between;
@@ -82,5 +77,23 @@ export const PlayerOptions = styled.div`
 		color: transparent;
 		opacity: 0;
 		background: red;
+	}
+
+	&::after {
+		content: '';
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 120px;
+		z-index: -1;
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 0.2s ease-in-out;
+		background-image: linear-gradient(
+			to bottom,
+			transparent,
+			rgba(0, 0, 0, 0.6)
+		);
 	}
 `;

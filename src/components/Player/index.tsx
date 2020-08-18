@@ -10,8 +10,10 @@ import {
 	ProgressBarBackground,
 	ProgressBarLoading,
 	ProgressBarCurrent,
+	BufferedBar,
 } from './components/ProgressBar';
 import TimePopup from './components/TimePopup';
+import ClockTime from './components/Clock';
 import {
 	VolumeBar,
 	VolumeIcon,
@@ -36,6 +38,7 @@ interface ActiveEpisode {
 interface PlayerProps {
 	poster: string;
 	autoplay: boolean;
+	loop?: boolean;
 }
 
 interface StorageVolume {
@@ -45,6 +48,7 @@ interface StorageVolume {
 const Player: React.FunctionComponent<PlayerProps> = ({
 	poster,
 	autoplay = false,
+	loop = false,
 }: PlayerProps) => {
 	/* REFS */
 	const videoElement = useRef<HTMLVideoElement>(null);
@@ -56,6 +60,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 	const [isPlaying, setIsPlaying] = useState(false);
 	const [isFullScreen, setIsFullscreen] = useState(false);
 	const [progressBarWidth, setProgressBarWidth] = useState(0);
+	const [bufferedWidth, setBufferedWidth] = useState(0);
 	const [currentTime, setCurrentTime] = useState(0);
 	const [videoDuration, setVideoDuration] = useState(0);
 	const [resoPopupOpen, setResoPopupOpen] = useState(false);
@@ -84,6 +89,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		activeEpisode,
 		episodeResolutions,
 		handleChangeCurrentVideo,
+		handleClearEpisodeHookData,
 	} = useEspisodesHook();
 
 	useEffect(() => {
@@ -99,6 +105,12 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 			handleChangeCurrentVideo(episodeResolutions[0]);
 		}
 	}, [episodeResolutions, handleChangeCurrentVideo]);
+
+	useEffect(() => {
+		return () => {
+			handleClearEpisodeHookData();
+		};
+	}, [handleClearEpisodeHookData]);
 
 	useEffect(() => {
 		const video = videoElement.current;
@@ -142,6 +154,27 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 		}
 	}, []);
 
+	const handleBufferedUpdate = useCallback(() => {
+		const video = videoElement.current;
+		if (!video) return;
+		if (video.duration > 0) {
+			// eslint-disable-next-line no-plusplus
+			for (let i = 0; i < video.buffered.length; i++) {
+				if (
+					video.buffered.start(video.buffered.length - 1 - i) <
+					video.currentTime
+				) {
+					setBufferedWidth(
+						(video.buffered.end(video.buffered.length - 1 - i) /
+							video.duration) *
+							100,
+					);
+					break;
+				}
+			}
+		}
+	}, []);
+
 	const handleTimeUpdate = useCallback(() => {
 		const video = videoElement.current;
 		const progress = progressBarElement.current;
@@ -150,9 +183,9 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 			setVideoDuration(video.duration);
 			setCurrentTime(video.currentTime);
 		}
-
 		handleProgressBarUpdate();
-	}, [handleProgressBarUpdate]);
+		handleBufferedUpdate();
+	}, [handleProgressBarUpdate, handleBufferedUpdate]);
 
 	const handleResolutiontitle = useCallback((title: string): string => {
 		return title.split('-')[1];
@@ -332,7 +365,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 					className="player__title"
 					onClick={() => handlePlayPause(true)}
 				>
-					{activeEpisode.title}
+					<p>{activeEpisode.title}</p>
 				</PlayerTitle>
 			)}
 			<video
@@ -343,6 +376,7 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 				onPlay={handleVideoChange}
 				onPause={handleVideoChange}
 				onTimeUpdate={handleTimeUpdate}
+				loop={loop}
 				poster={
 					activeEpisode.id
 						? `http://thumb.zetai.info/${activeEpisode.id}.jpg`
@@ -358,23 +392,12 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 			{/* circle play center */}
 			<PlayCircle
-				style={{
-					display: isPlaying ? 'block' : 'none',
-				}}
-				className="player__play-circle"
+				className={`player__play-circle ${!isPlaying ? 'show' : 'hidde'}`}
 				onClick={handlePlayPause}
 			/>
 
 			{/* player controls */}
 			<PlayerOptions className="player__controls">
-				<button
-					type="button"
-					className="player__useless-area"
-					onClick={() => handlePlayPause(true)}
-				>
-					hehe boy
-				</button>
-
 				<PlayPauseButton
 					className={`player__option ${isLoading ? 'loading' : 'none'}`}
 					isPlaying={isPlaying}
@@ -392,6 +415,10 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 						data-width={`${progressBarWidth}%`}
 					/>
 					<ProgressBarBackground className="player__range--background" />
+					<BufferedBar
+						style={{ width: `${bufferedWidth}%` }}
+						className="player__range--buffering"
+					/>
 					<ProgressBarLoading
 						className="player__bar--loading"
 						isLoading={isLoading}
@@ -407,6 +434,11 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 						{timePopup}
 					</TimePopup>
 				</ProgressBarContainer>
+				<ClockTime
+					className="player__option --no-pointer --no-hover"
+					currentTime={currentTime}
+					duration={videoDuration}
+				/>
 
 				{/* volume */}
 				<>

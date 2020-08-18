@@ -35,15 +35,6 @@ interface AnimeParams {
 	episodeId: string;
 }
 
-interface ActiveEpisode {
-	id: number | undefined;
-	title: string | undefined;
-}
-
-interface EspisodesListOrderType {
-	isReverse: boolean;
-}
-
 const AnimePage: React.FunctionComponent = () => {
 	const {
 		addToHistory,
@@ -213,6 +204,7 @@ const AnimePage: React.FunctionComponent = () => {
 	const options = {
 		poster: playerPoster,
 		autoplay: true,
+		loop: true,
 	};
 
 	return (
@@ -266,7 +258,15 @@ const AnimePage: React.FunctionComponent = () => {
 										type="button"
 										key={id}
 										onClick={(e) => {
-											handleEpisodeRequest(e, id, title);
+											const titleFiltered = FilterEpisodeTitle({
+												index,
+												episodeTitle: title,
+												animeTitle: animeDescription.title,
+												genres: animeDescription.genres,
+												total: isReverse ? arr.length : undefined,
+											});
+
+											handleEpisodeRequest(e, id, titleFiltered);
 											handleAddToHistory(id, title, 0);
 										}}
 										className={`${

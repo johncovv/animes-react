@@ -6,12 +6,12 @@ export const FilterAnime = async (data: []): Promise<ApiRequest.Anime[]> => {
 		const { Id, Nome, Desc, Status, Imagem, Ano, Categoria, Rank } = item;
 
 		filtered.push({
-			id: Id,
+			id: parseInt(Id, 10),
 			title: Nome,
 			status: Status,
 			genres: Categoria,
 			year: Ano,
-			views: Rank,
+			views: parseInt(Rank, 10),
 			thumbnail: Imagem,
 			description: Desc,
 		});

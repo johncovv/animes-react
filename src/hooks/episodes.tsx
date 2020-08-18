@@ -3,8 +3,8 @@ import React, { createContext, useState, useCallback, useContext } from 'react';
 import lodash from 'lodash';
 
 interface ActiveEpisodeType {
-	id: number | undefined;
-	title: string | undefined;
+	id: number;
+	title: string;
 }
 
 interface EpisodesContextData {
@@ -17,6 +17,7 @@ interface EpisodesContextData {
 		resolutions: ApiRequest.EpiOption[],
 	): void;
 	handleChangeCurrentVideo(option: ApiRequest.EpiOption): void;
+	handleClearEpisodeHookData(): void;
 }
 
 const EpisodesContext = createContext<EpisodesContextData>(
@@ -24,10 +25,9 @@ const EpisodesContext = createContext<EpisodesContextData>(
 );
 
 export const EpisodesProvider: React.FunctionComponent = ({ children }) => {
-	const [activeEpisode, setActiveEpisode] = useState<ActiveEpisodeType>({
-		id: undefined,
-		title: undefined,
-	});
+	const [activeEpisode, setActiveEpisode] = useState<ActiveEpisodeType>(
+		{} as ActiveEpisodeType,
+	);
 
 	const [episodeResolutions, setEpisodeResolutions] = useState<
 		ApiRequest.EpiOption[]
@@ -54,6 +54,12 @@ export const EpisodesProvider: React.FunctionComponent = ({ children }) => {
 		[setCurrentVideo],
 	);
 
+	const handleClearEpisodeHookData = useCallback(() => {
+		setEpisodeResolutions([] as ApiRequest.EpiOption[]);
+		setActiveEpisode({} as ActiveEpisodeType);
+		setCurrentVideo({} as ApiRequest.EpiOption);
+	}, []);
+
 	return (
 		<EpisodesContext.Provider
 			value={{
@@ -62,6 +68,7 @@ export const EpisodesProvider: React.FunctionComponent = ({ children }) => {
 				currentVideo,
 				handleChangeEpisode,
 				handleChangeCurrentVideo,
+				handleClearEpisodeHookData,
 			}}
 		>
 			{children}
