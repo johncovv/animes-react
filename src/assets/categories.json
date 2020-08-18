@@ -1,0 +1,283 @@
+[
+	{
+		"name": "Dublado",
+		"options": ["Dublado"]
+	},
+	{
+		"name": "Filme",
+		"options": ["filme"]
+	},
+	{
+		"name": "OVA",
+		"options": ["OVA"]
+	},
+	{
+		"name": "Adaptação",
+		"options": ["Adaptação de Manga", "Adaptação Manga", "Manga"]
+	},
+	{
+		"name": "Aliens",
+		"options": ["Aliens"]
+	},
+	{
+		"name": "Android",
+		"options": ["Android", "Androids", "Cyborg"]
+	},
+	{
+		"name": "Anjos",
+		"options": ["Anjos", "Angels"]
+	},
+	{
+		"name": "Artes Marciais",
+		"options": ["Arte Marc", "Artes Mar", "Arts Mar", "Luta"]
+	},
+	{
+		"name": "Aventura",
+		"options": ["Aventura", "Aventua"]
+	},
+	{
+		"name": "Ação",
+		"options": ["Ação", "Açao", "Acao"]
+	},
+	{
+		"name": "Baseball",
+		"options": ["Baseball", "Beisebol"]
+	},
+	{
+		"name": "Basquete",
+		"options": ["Basketball", "Basquete"]
+	},
+	{
+		"name": "Bishonen",
+		"options": ["Bishonen", "Bishounen", "Boys Love"]
+	},
+	{
+		"name": "Boxe",
+		"options": ["Boxe"]
+	},
+	{
+		"name": "Cartoon",
+		"options": ["Cartoon"]
+	},
+	{
+		"name": "Comédia",
+		"options": ["Comedy", "Comédia", "Paródia"]
+	},
+	{
+		"name": "Corrida",
+		"options": ["Corrida", "Corridas"]
+	},
+	{
+		"name": "Culinária",
+		"options": ["Cozinha", "Culinária"]
+	},
+	{
+		"name": "Cyberpunk",
+		"options": ["Cyberpunk"]
+	},
+	{
+		"name": "Dança",
+		"options": ["Dança"]
+	},
+	{
+		"name": "Demons",
+		"options": ["Demônio"]
+	},
+	{
+		"name": "Detetive",
+		"options": ["Detetive", "Espionagem"]
+	},
+	{
+		"name": "Drama",
+		"options": ["Drama"]
+	},
+	{
+		"name": "Ecchi",
+		"options": ["Ecchi"]
+	},
+	{
+		"name": "Escolar",
+		"options": [
+			"Escola",
+			"Escolar",
+			"School",
+			"Vida Colegial",
+			"Colegial",
+			"Vida Escola"
+		]
+	},
+	{
+		"name": "Espacial",
+		"options": ["Espaço", "Espacial", "Space", "Spacial", "Spaço"]
+	},
+	{
+		"name": "Esporte",
+		"options": ["Esporte", "Futebol"]
+	},
+	{
+		"name": "Fantasia",
+		"options": ["Fantasia", "Fantasiay", "Fatasia"]
+	},
+	{
+		"name": "Ficção Científica",
+		"options": [
+			"Científica",
+			"Ficção",
+			"Ficção Científica",
+			"Sci-Fi",
+			"Fição",
+			"SciFi"
+		]
+	},
+	{
+		"name": "Game",
+		"options": ["Game", "Jogo", "Jogos"]
+	},
+	{
+		"name": "Guerra",
+		"options": ["Guerra"]
+	},
+	{
+		"name": "Harém",
+		"options": ["Harem"]
+	},
+	{
+		"name": "Histórico",
+		"options": ["História", "Histórico"]
+	},
+	{
+		"name": "Infantil",
+		"options": ["Infantil", "Infatil", "Kids", "Kodomo"]
+	},
+	{
+		"name": "Isekai",
+		"options": ["Isekai"]
+	},
+	{
+		"name": "Josei",
+		"options": ["Josei"]
+	},
+	{
+		"name": "Light Novel",
+		"options": ["Light novel", "Novel", "Novela", "Novela Visual"]
+	},
+	{
+		"name": "Magia",
+		"options": ["Magia", "Magica", "Mágica"]
+	},
+	{
+		"name": "Mahou Shoujo",
+		"options": ["Garota magica", "Garotas Magicas", "Mahou Shoujo"]
+	},
+	{
+		"name": "Mecha",
+		"options": ["Mecha", "Robôs"]
+	},
+	{
+		"name": "Medieval",
+		"options": ["Medieval"]
+	},
+	{
+		"name": "Militar",
+		"options": ["Miliar", "Militar", "Militarismo"]
+	},
+	{
+		"name": "Mistério",
+		"options": ["Mistério"]
+	},
+	{
+		"name": "Musical",
+		"options": ["Musical", "Música"]
+	},
+	{
+		"name": "Ninja",
+		"options": ["Ninja"]
+	},
+	{
+		"name": "ONA",
+		"options": ["ONA"]
+	},
+	{
+		"name": "Policial",
+		"options": ["Policial"]
+	},
+	{
+		"name": "Psicológico",
+		"options": ["Psicológica", "Psicológico"]
+	},
+	{
+		"name": "Pós-apocalíptico",
+		"options": ["Pós-Apocalips", "Apocaliptico", "apocalíptica"]
+	},
+	{
+		"name": "Samurai",
+		"options": ["Samurai"]
+	},
+	{
+		"name": "Seinen",
+		"options": ["Seinen", "Seine"]
+	},
+	{
+		"name": "Shoujo",
+		"options": ["Shoujo", "Shojo"]
+	},
+	{
+		"name": "Shounen",
+		"options": ["Shonen", "Shounen", "Shōnen"]
+	},
+	{
+		"name": "Slice of Life",
+		"options": [
+			"Cotiano",
+			"Cotidiano",
+			"Estilo de Vida",
+			"Slice of Life",
+			"Slife of Life",
+			"Vida Diaria",
+			"Vida Siária"
+		]
+	},
+	{
+		"name": "Sobrenatural",
+		"options": ["Sobranatural", "Sobrenatural", "Supernatural"]
+	},
+	{
+		"name": "Super Poderes",
+		"options": [
+			"Super",
+			"Super Podederes",
+			"Super Poderes",
+			"Super poders",
+			"Super-Poder",
+			"Superpoder"
+		]
+	},
+	{
+		"name": "Suspense",
+		"options": ["Suspense"]
+	},
+	{
+		"name": "Terror",
+		"options": ["Herror", "Terror", "Horror", "Thriller"]
+	},
+	{
+		"name": "Vampiro",
+		"options": ["Vampire", "Vampiro"]
+	},
+	{
+		"name": "Yaoi",
+		"options": ["Yaoi"]
+	},
+	{
+		"name": "Yokai",
+		"options": ["Yokai"]
+	},
+	{
+		"name": "Yuri",
+		"options": ["Yuri"]
+	},
+	{
+		"name": "Adulto",
+		"options": ["Adulto"]
+	}
+]
