@@ -35,6 +35,13 @@ export const PlayerContainer = styled.div<Player.GlobalAttr>`
 			}
 		}
 	}
+
+	@media (max-width: 479px) {
+		.player__title p,
+		.player__option {
+			font-size: 14px !important;
+		}
+	}
 `;
 
 export const PlayerOptions = styled.div`
