@@ -20,11 +20,24 @@
 	},
 	"plugins": ["react", "@typescript-eslint", "react-hooks", "prettier"],
 	"rules": {
+		"react/jsx-props-no-spreading": [
+			"error",
+			{
+				"html": "ignore",
+				"custom": "ignore",
+				"exceptions": [""]
+			}
+		],
+		"react/require-default-props": "off",
+		"jsx-a11y/media-has-caption": "off",
+		"react/prop-types": [2, { "ignore": ["children"] }],
+		"@typescript-eslint/ban-types": "off",
 		"react/jsx-one-expression-per-line": "off",
 		"react/jsx-indent-props": ["error", "tab"],
 		"react/jsx-indent": ["error", "tab"],
 		"prettier/prettier": "error",
-		"react-hooks/rules-of-hooks": "error",
+		// "react-hooks/rules-of-hooks": "error",
+		// alerta caso esqueça de colocar uma dependencia no array do useEffect e useCallback
 		"react-hooks/exhaustive-deps": "warn",
 		// enale JSX on .tsx files
 		"react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
