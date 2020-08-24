@@ -1,103 +1,128 @@
 [
 	{
-		"name": "Dublado",
-		"options": ["Dublado"]
+		"id": 1,
+		"label": "Dublado",
+		"value": ["Dublado"]
 	},
 	{
-		"name": "Filme",
-		"options": ["filme"]
+		"id": 2,
+		"label": "Filme",
+		"value": ["filme"]
 	},
 	{
-		"name": "OVA",
-		"options": ["OVA"]
+		"id": 3,
+		"label": "OVA",
+		"value": ["OVA"]
 	},
 	{
-		"name": "Adaptação",
-		"options": ["Adaptação de Manga", "Adaptação Manga", "Manga"]
+		"id": 4,
+		"label": "Adaptação",
+		"value": ["Adaptação de Manga", "Adaptação Manga", "Manga"]
 	},
 	{
-		"name": "Aliens",
-		"options": ["Aliens"]
+		"id": 5,
+		"label": "Aliens",
+		"value": ["Aliens"]
 	},
 	{
-		"name": "Android",
-		"options": ["Android", "Androids", "Cyborg"]
+		"id": 6,
+		"label": "Android",
+		"value": ["Android", "Androids", "Cyborg"]
 	},
 	{
-		"name": "Anjos",
-		"options": ["Anjos", "Angels"]
+		"id": 7,
+		"label": "Anjos",
+		"value": ["Anjos", "Angels"]
 	},
 	{
-		"name": "Artes Marciais",
-		"options": ["Arte Marc", "Artes Mar", "Arts Mar", "Luta"]
+		"id": 8,
+		"label": "Artes Marciais",
+		"value": ["Arte Marc", "Artes Mar", "Arts Mar", "Luta"]
 	},
 	{
-		"name": "Aventura",
-		"options": ["Aventura", "Aventua"]
+		"id": 9,
+		"label": "Aventura",
+		"value": ["Aventura", "Aventua"]
 	},
 	{
-		"name": "Ação",
-		"options": ["Ação", "Açao", "Acao"]
+		"id": 10,
+		"label": "Ação",
+		"value": ["Ação", "Açao", "Acao"]
 	},
 	{
-		"name": "Baseball",
-		"options": ["Baseball", "Beisebol"]
+		"id": 11,
+		"label": "Baseball",
+		"value": ["Baseball", "Beisebol"]
 	},
 	{
-		"name": "Basquete",
-		"options": ["Basketball", "Basquete"]
+		"id": 12,
+		"label": "Basquete",
+		"value": ["Basketball", "Basquete"]
 	},
 	{
-		"name": "Bishonen",
-		"options": ["Bishonen", "Bishounen", "Boys Love"]
+		"id": 13,
+		"label": "Bishonen",
+		"value": ["Bishonen", "Bishounen", "Boys Love"]
 	},
 	{
-		"name": "Boxe",
-		"options": ["Boxe"]
+		"id": 14,
+		"label": "Boxe",
+		"value": ["Boxe"]
 	},
 	{
-		"name": "Cartoon",
-		"options": ["Cartoon"]
+		"id": 15,
+		"label": "Cartoon",
+		"value": ["Cartoon"]
 	},
 	{
-		"name": "Comédia",
-		"options": ["Comedy", "Comédia", "Paródia"]
+		"id": 16,
+		"label": "Comédia",
+		"value": ["Comedy", "Comédia", "Paródia"]
 	},
 	{
-		"name": "Corrida",
-		"options": ["Corrida", "Corridas"]
+		"id": 17,
+		"label": "Corrida",
+		"value": ["Corrida", "Corridas"]
 	},
 	{
-		"name": "Culinária",
-		"options": ["Cozinha", "Culinária"]
+		"id": 18,
+		"label": "Culinária",
+		"value": ["Cozinha", "Culinária"]
 	},
 	{
-		"name": "Cyberpunk",
-		"options": ["Cyberpunk"]
+		"id": 19,
+		"label": "Cyberpunk",
+		"value": ["Cyberpunk"]
 	},
 	{
-		"name": "Dança",
-		"options": ["Dança"]
+		"id": 20,
+		"label": "Dança",
+		"value": ["Dança"]
 	},
 	{
-		"name": "Demons",
-		"options": ["Demônio"]
+		"id": 21,
+		"label": "Demons",
+		"value": ["Demônio"]
 	},
 	{
-		"name": "Detetive",
-		"options": ["Detetive", "Espionagem"]
+		"id": 22,
+		"label": "Detetive",
+		"value": ["Detetive", "Espionagem"]
 	},
 	{
-		"name": "Drama",
-		"options": ["Drama"]
+		"id": 23,
+		"label": "Drama",
+		"value": ["Drama"]
 	},
 	{
-		"name": "Ecchi",
-		"options": ["Ecchi"]
+		"id": 24,
+		"label": "Ecchi",
+		"value": ["Ecchi"]
 	},
 	{
-		"name": "Escolar",
-		"options": [
+		"id": 25,
+		"label": "Escolar",
+		"value": [
 			"Escola",
 			"Escolar",
 			"School",
@@ -107,20 +132,24 @@
 		]
 	},
 	{
-		"name": "Espacial",
-		"options": ["Espaço", "Espacial", "Space", "Spacial", "Spaço"]
+		"id": 26,
+		"label": "Espacial",
+		"value": ["Espaço", "Espacial", "Space", "Spacial", "Spaço"]
 	},
 	{
-		"name": "Esporte",
-		"options": ["Esporte", "Futebol"]
+		"id": 27,
+		"label": "Esporte",
+		"value": ["Esporte", "Futebol"]
 	},
 	{
-		"name": "Fantasia",
-		"options": ["Fantasia", "Fantasiay", "Fatasia"]
+		"id": 28,
+		"label": "Fantasia",
+		"value": ["Fantasia", "Fantasiay", "Fatasia"]
 	},
 	{
-		"name": "Ficção Científica",
-		"options": [
+		"id": 29,
+		"label": "Ficção Científica",
+		"value": [
 			"Científica",
 			"Ficção",
 			"Ficção Científica",
@@ -130,104 +159,129 @@
 		]
 	},
 	{
-		"name": "Game",
-		"options": ["Game", "Jogo", "Jogos"]
+		"id": 30,
+		"label": "Game",
+		"value": ["Game", "Jogo", "Jogos"]
 	},
 	{
-		"name": "Guerra",
-		"options": ["Guerra"]
+		"id": 31,
+		"label": "Guerra",
+		"value": ["Guerra"]
 	},
 	{
-		"name": "Harém",
-		"options": ["Harem"]
+		"id": 32,
+		"label": "Harém",
+		"value": ["Harem"]
 	},
 	{
-		"name": "Histórico",
-		"options": ["História", "Histórico"]
+		"id": 33,
+		"label": "Histórico",
+		"value": ["História", "Histórico"]
 	},
 	{
-		"name": "Infantil",
-		"options": ["Infantil", "Infatil", "Kids", "Kodomo"]
+		"id": 34,
+		"label": "Infantil",
+		"value": ["Infantil", "Infatil", "Kids", "Kodomo"]
 	},
 	{
-		"name": "Isekai",
-		"options": ["Isekai"]
+		"id": 35,
+		"label": "Isekai",
+		"value": ["Isekai"]
 	},
 	{
-		"name": "Josei",
-		"options": ["Josei"]
+		"id": 36,
+		"label": "Josei",
+		"value": ["Josei"]
 	},
 	{
-		"name": "Light Novel",
-		"options": ["Light novel", "Novel", "Novela", "Novela Visual"]
+		"id": 37,
+		"label": "Light Novel",
+		"value": ["Light novel", "Novel", "Novela", "Novela Visual"]
 	},
 	{
-		"name": "Magia",
-		"options": ["Magia", "Magica", "Mágica"]
+		"id": 38,
+		"label": "Magia",
+		"value": ["Magia", "Magica", "Mágica"]
 	},
 	{
-		"name": "Mahou Shoujo",
-		"options": ["Garota magica", "Garotas Magicas", "Mahou Shoujo"]
+		"id": 39,
+		"label": "Mahou Shoujo",
+		"value": ["Garota magica", "Garotas Magicas", "Mahou Shoujo"]
 	},
 	{
-		"name": "Mecha",
-		"options": ["Mecha", "Robôs"]
+		"id": 40,
+		"label": "Mecha",
+		"value": ["Mecha", "Robôs"]
 	},
 	{
-		"name": "Medieval",
-		"options": ["Medieval"]
+		"id": 41,
+		"label": "Medieval",
+		"value": ["Medieval"]
 	},
 	{
-		"name": "Militar",
-		"options": ["Miliar", "Militar", "Militarismo"]
+		"id": 42,
+		"label": "Militar",
+		"value": ["Miliar", "Militar", "Militarismo"]
 	},
 	{
-		"name": "Mistério",
-		"options": ["Mistério"]
+		"id": 43,
+		"label": "Mistério",
+		"value": ["Mistério"]
 	},
 	{
-		"name": "Musical",
-		"options": ["Musical", "Música"]
+		"id": 44,
+		"label": "Musical",
+		"value": ["Musical", "Música"]
 	},
 	{
-		"name": "Ninja",
-		"options": ["Ninja"]
+		"id": 45,
+		"label": "Ninja",
+		"value": ["Ninja"]
 	},
 	{
-		"name": "ONA",
-		"options": ["ONA"]
+		"id": 46,
+		"label": "ONA",
+		"value": ["ONA"]
 	},
 	{
-		"name": "Policial",
-		"options": ["Policial"]
+		"id": 47,
+		"label": "Policial",
+		"value": ["Policial"]
 	},
 	{
-		"name": "Psicológico",
-		"options": ["Psicológica", "Psicológico"]
+		"id": 48,
+		"label": "Psicológico",
+		"value": ["Psicológica", "Psicológico"]
 	},
 	{
-		"name": "Pós-apocalíptico",
-		"options": ["Pós-Apocalips", "Apocaliptico", "apocalíptica"]
+		"id": 49,
+		"label": "Pós-apocalíptico",
+		"value": ["Pós-Apocalips", "Apocaliptico", "apocalíptica"]
 	},
 	{
-		"name": "Samurai",
-		"options": ["Samurai"]
+		"id": 50,
+		"label": "Samurai",
+		"value": ["Samurai"]
 	},
 	{
-		"name": "Seinen",
-		"options": ["Seinen", "Seine"]
+		"id": 51,
+		"label": "Seinen",
+		"value": ["Seinen", "Seine"]
 	},
 	{
-		"name": "Shoujo",
-		"options": ["Shoujo", "Shojo"]
+		"id": 52,
+		"label": "Shoujo",
+		"value": ["Shoujo", "Shojo"]
 	},
 	{
-		"name": "Shounen",
-		"options": ["Shonen", "Shounen", "Shōnen"]
+		"id": 53,
+		"label": "Shounen",
+		"value": ["Shonen", "Shounen", "Shōnen"]
 	},
 	{
-		"name": "Slice of Life",
-		"options": [
+		"id": 54,
+		"label": "Slice of Life",
+		"value": [
 			"Cotiano",
 			"Cotidiano",
 			"Estilo de Vida",
@@ -238,12 +292,14 @@
 		]
 	},
 	{
-		"name": "Sobrenatural",
-		"options": ["Sobranatural", "Sobrenatural", "Supernatural"]
+		"id": 55,
+		"label": "Sobrenatural",
+		"value": ["Sobranatural", "Sobrenatural", "Supernatural"]
 	},
 	{
-		"name": "Super Poderes",
-		"options": [
+		"id": 56,
+		"label": "Super Poderes",
+		"value": [
 			"Super",
 			"Super Podederes",
 			"Super Poderes",
@@ -253,31 +309,38 @@
 		]
 	},
 	{
-		"name": "Suspense",
-		"options": ["Suspense"]
+		"id": 57,
+		"label": "Suspense",
+		"value": ["Suspense"]
 	},
 	{
-		"name": "Terror",
-		"options": ["Herror", "Terror", "Horror", "Thriller"]
+		"id": 58,
+		"label": "Terror",
+		"value": ["Herror", "Terror", "Horror", "Thriller"]
 	},
 	{
-		"name": "Vampiro",
-		"options": ["Vampire", "Vampiro"]
+		"id": 59,
+		"label": "Vampiro",
+		"value": ["Vampire", "Vampiro"]
 	},
 	{
-		"name": "Yaoi",
-		"options": ["Yaoi"]
+		"id": 60,
+		"label": "Yaoi",
+		"value": ["Yaoi"]
 	},
 	{
-		"name": "Yokai",
-		"options": ["Yokai"]
+		"id": 61,
+		"label": "Yokai",
+		"value": ["Yokai"]
 	},
 	{
-		"name": "Yuri",
-		"options": ["Yuri"]
+		"id": 62,
+		"label": "Yuri",
+		"value": ["Yuri"]
 	},
 	{
-		"name": "Adulto",
-		"options": ["Adulto"]
+		"id": 63,
+		"label": "Adulto",
+		"value": ["Adulto"]
 	}
 ]

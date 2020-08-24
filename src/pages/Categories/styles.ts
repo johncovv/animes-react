@@ -4,208 +4,198 @@ import { shade } from 'polished';
 
 export const FiltersContainer = styled.div`
 	display: flex;
-	flex-flow: row nowrap;
+	flex-flow: column nowrap;
+
+	@media (min-width: 780px) {
+		margin-top: 200px;
+		flex-flow: row nowrap;
+		justify-content: space-between;
+
+		.explain,
+		.form {
+			width: calc(50% - 1rem) !important;
+		}
+
+		.explain {
+			margin: 0 !important;
+		}
+
+		.form .form-group--row {
+			&.cols-2 {
+				display: grid;
+				grid-template-columns: repeat(2, calc(50% - 0.5rem));
+				gap: 1rem;
+			}
+		}
+	}
 
 	.explain,
 	.form {
-		width: 50%;
+		width: 100%;
+	}
+
+	.form {
+		display: flex;
+		align-items: flex-end;
+		border-radius: 8px;
+		padding: 10px;
+
+		@media (min-width: 480px) {
+			padding: 25px;
+		}
+
+		.active__filter {
+			font-size: 16px;
+			display: flex;
+			flex-flow: row nowrap;
+			justify-content: space-between;
+
+			p span {
+				color: var(--filter-color);
+			}
+
+			a {
+				color: #fff;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+
+		background-image: linear-gradient(
+			to bottom,
+			transparent,
+			rgba(0, 0, 0, 0.64)
+		);
+
+		.form-group {
+			width: 100%;
+
+			&--row {
+				& > button {
+					all: unset;
+					width: 100%;
+					height: 38px;
+					border-radius: 50px;
+					background-color: var(--filter-color);
+					transition: background-color 0.1s ease-in-out;
+
+					&:hover {
+						background-color: ${shade(0.2, '#ff008c')};
+					}
+
+					display: flex;
+					justify-content: center;
+					align-items: center;
+
+					font-size: 16px;
+					cursor: pointer;
+
+					svg {
+						margin-right: 6px;
+
+						path {
+							stroke: #fff;
+						}
+					}
+				}
+
+				& > div,
+				& > button {
+					margin-top: 1rem;
+				}
+			}
+		}
 	}
 
 	.explain {
-		padding-right: 0.75rem;
+		margin-bottom: 20px;
+
 		.title {
+			margin-bottom: 15px;
 			font-weight: 800;
 			font-size: 50px;
 		}
 
 		p {
 			color: #a1a1a1;
-		}
-	}
 
-	.form {
-		padding-left: 0.75rem;
-		.form-group {
-			&--row {
-				display: grid;
-				grid-template-columns: repeat(2, 50%);
-				gap: 1rem;
+			&:not(:last-child) {
+				margin-bottom: 20px;
 			}
 		}
 	}
 `;
 
-export const SelectField = styled.div`
-	position: relative;
-	background-color: var(--secondary-bg-color);
-	height: 38px;
-	padding: 0px 45px 0px 15px;
-	display: flex;
-	align-items: center;
-	border-radius: 50px;
-	cursor: pointer;
-	user-select: none;
-	/* overflow-x: hidden; */
+export const ResultContainer = styled.div`
+	margin-top: 50px;
 
-	p {
-		width: 100%;
-		overflow-x: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		font-size: 14px;
-		color: #6f6f6f;
-
-		span {
-			position: relative;
-
-			&.selected-option {
-				&:last-of-type {
-					&::after {
-						content: '.';
-						position: absolute;
-						bottom: 0;
-						right: -4px;
-					}
-				}
-
-				&:not(:last-of-type) {
-					margin-right: 5px;
-
-					&::after {
-						content: ',';
-						position: absolute;
-						bottom: 0;
-						right: -3px;
-					}
-				}
-			}
-		}
+	.results-title {
+		margin-bottom: 25px;
 	}
 
-	.default-option {
-		width: 100%;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-
-	.arrow {
-		position: absolute;
-		right: 15px;
-		top: 0;
-		bottom: 0;
+	.pagination {
 		display: flex;
-		align-items: center;
+		flex-flow: row nowrap;
+		justify-content: center;
 
-		svg {
-			fill: #6f6f6f;
-			transition: transform 0.2s ease-in-out;
+		font-size: 14px;
+
+		&-top {
+			margin-bottom: 25px;
 		}
-	}
 
-	&.hidde {
-		.container-options {
-			display: none !important;
+		&-bottom {
+			margin-top: 25px;
+		}
 
-			&::after,
-			&::before {
-				display: none !important;
+		li {
+			background-color: #1f1f1f;
+			color: #6f6f6f;
+			border-radius: 8px;
+			cursor: pointer;
+
+			a {
+				height: 38px;
+				padding: 0 12px;
+				display: flex;
+				align-items: center;
+
+				svg {
+					polyline {
+						stroke: #6f6f6f;
+					}
+				}
+			}
+
+			transition: background-color 0.1s ease-in-out, filter 0.1s ease-in-out;
+
+			&:not(.disabled):not(.selected):hover {
+				background-color: ${shade(0.3, '#1f1f1f')};
+			}
+
+			&.selected {
+				color: #fff;
+				background-color: var(--primary-color);
+
+				&:hover {
+					filter: brightness(0.8);
+				}
+			}
+
+			&.disabled {
+				display: none;
+			}
+
+			&.break {
+				background-color: ${shade(0.3, '#1f1f1f')};
+				pointer-events: none;
+			}
+
+			&:not(:last-child) {
+				margin-right: 0.5rem;
 			}
 		}
-
-		.arrow svg {
-			transform: scaleY(-1);
-		}
-	}
-
-	.container-options {
-		position: absolute;
-		top: calc(100% + 1px);
-		left: 0;
-		right: 0;
-		height: calc(38px * 5);
-
-		.options {
-			position: absolute;
-			background-color: var(--secondary-bg-color);
-			flex-flow: column nowrap;
-			top: 0;
-			bottom: 0;
-			width: 100%;
-			overflow-y: auto;
-			display: flex;
-
-			z-index: 10;
-			box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-
-			border-bottom-left-radius: calc(38px / 2);
-			border-bottom-right-radius: calc(38px / 2);
-		}
-
-		&::before {
-			z-index: 5;
-			content: '';
-			position: absolute;
-			bottom: 100%;
-			height: 38px;
-			width: 15px;
-			border-bottom-left-radius: 25px;
-			box-shadow: 0 15px 0 0 var(--secondary-bg-color);
-		}
-
-		&::after {
-			z-index: 5;
-			content: '';
-			position: absolute;
-			bottom: 100%;
-			right: 0%;
-			height: 38px;
-			width: 15px;
-			border-bottom-right-radius: 25px;
-			box-shadow: 0 15px 0 0 var(--secondary-bg-color);
-		}
-	}
-`;
-
-export const OptionField = styled.button.attrs({
-	type: 'button',
-})`
-	all: unset;
-	position: relative;
-	background-color: var(--secondary-bg-color);
-	min-height: 38px;
-	max-height: 38px;
-	padding: 0 15px;
-	font-size: 14px;
-	color: #6f6f6f;
-	border-right: solid 1px rgba(0, 0, 0, 0.2);
-
-	svg {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		right: 7.5px;
-
-		path {
-			stroke: #fff;
-		}
-
-		&:hover {
-			path {
-				stroke: var(--fav-color);
-			}
-		}
-	}
-
-	&.selected {
-		background-color: ${shade(0.5, '#1f1f1f')} !important;
-	}
-
-	&:not(.selected):hover {
-		background-color: ${shade(0.2, '#1f1f1f')} !important;
-	}
-
-	&:nth-child(even) {
-		background-color: ${shade(0.1, '#1f1f1f')};
 	}
 `;

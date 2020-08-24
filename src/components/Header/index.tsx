@@ -4,6 +4,8 @@ import { FiHeart, FiArchive, FiSearch, FiMenu } from 'react-icons/fi';
 
 import { HeaderTag } from './styles';
 
+import Input from '../Input';
+
 const Header: React.FunctionComponent = () => {
 	const [searchInput, setSearchInput] = useState('');
 	const [isOpen, setIsOpen] = useState(false);
@@ -18,22 +20,13 @@ const Header: React.FunctionComponent = () => {
 		setIsOpen(false);
 	}, [setIsOpen]);
 
-	const handleSearchRequest = useCallback(
-		(event, searchButton) => {
-			const { key } = event;
+	const handleSearchRequest = useCallback(() => {
+		if (searchInput.trim().length > 0) {
+			const search = encodeURIComponent(`${searchInput}`);
 
-			if (key === 'Enter' || searchButton) {
-				if (searchInput.trim().length > 0) {
-					const search = encodeURIComponent(`${searchInput}`);
-
-					history.push(`/filtrar/${search}`);
-
-					setSearchInput('');
-				}
-			}
-		},
-		[history, searchInput],
-	);
+			history.push(`/filtrar/${search}`);
+		}
+	}, [searchInput, history]);
 
 	const handleTogglePopup = useCallback((active, disable) => {
 		const popupActive = window.document.querySelector(`.popup__${active}`);
@@ -94,23 +87,15 @@ const Header: React.FunctionComponent = () => {
 					</NavLink>
 				</nav>
 				<div className="search__input">
-					<Link to="/filtrar" className="search__icon-mobile">
+					<Link to="/filtrar" className="search__icon--mobile">
 						<FiSearch size={24} onClick={handleCloseMenuMobile} />
 					</Link>
 
-					<FiSearch
-						className="search__icon"
-						size={20}
-						onClick={() => handleSearchRequest(false, true)}
-					/>
-					<input
-						type="text"
-						name="search-anime"
-						id="search-input"
-						placeholder="Pesquisar anime..."
-						value={searchInput}
-						onChange={(event) => setSearchInput(event.target.value)}
-						onKeyPress={(e) => handleSearchRequest(e, false)}
+					<Input
+						placeHolder="Pesquisar anime..."
+						target={(value) => setSearchInput(value)}
+						searchRequest={handleSearchRequest}
+						clearOnRequest
 					/>
 				</div>
 				<div className="header__buttons">
