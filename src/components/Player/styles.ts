@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 
 export const PlayerContainer = styled.div<Player.GlobalAttr>`
 	position: relative;
@@ -60,30 +60,8 @@ export const PlayerOptions = styled.div`
 	transform: translateY(100%);
 	transition: transform 0.3s ease-in-out;
 
-	& .player__option {
-		&:not(.--no-pointer) {
-			cursor: pointer;
-		}
-
-		&:not(:last-child) {
-			margin-right: 15px;
-
-			@media only screen and (max-width: 767px) {
-				margin-right: 10px !important;
-			}
-		}
-	}
-
-	& .player__useless-area {
-		all: unset;
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 80px;
-		color: transparent;
-		opacity: 0;
-		background: red;
+	& > div {
+		margin-right: 15px;
 	}
 
 	&::after {
@@ -102,5 +80,12 @@ export const PlayerOptions = styled.div`
 			transparent,
 			rgba(0, 0, 0, 0.6)
 		);
+	}
+`;
+
+export default createGlobalStyle`
+	:root {
+		--player-color: #228ef3;
+		--player-rounded: 5px;
 	}
 `;

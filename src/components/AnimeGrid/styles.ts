@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FiHeart, FiClock } from 'react-icons/fi';
 import { IconBaseProps } from 'react-icons';
 
-import thumbNotFound from '../../assets/img/thumb-not-found.png';
+import loadingBackground from '../../assets/img/loading.gif';
 
 export const Content = styled.div`
 	display: grid;
@@ -75,10 +75,6 @@ export const WatchLater = styled(FiClock)<IconProps>`
 
 export const Item = styled.div`
 	position: relative;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-image: url(${thumbNotFound});
 
 	&:hover {
 		.grid__item {
@@ -146,9 +142,10 @@ export const ItemLink = styled(Link)`
 		width: 100%;
 		height: 100%;
 		z-index: 50;
-		background-size: cover;
 		background-repeat: no-repeat;
 		background-position: center;
+		background-size: 15%;
+		background-image: url(${loadingBackground});
 	}
 
 	.grid__item--title {

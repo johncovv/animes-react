@@ -1,15 +1,10 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import {
 	InputRange,
 	InputRangeBackground,
 	InputRangeCurrent,
 } from '../InputRange';
-
-import Button from '../ButtonOption';
-
-import volumeMax from '../../assets/volume/volume-max.svg';
-import volumeOff from '../../assets/volume/volume-off.svg';
 
 /*
 	VOLUME ICON / MOBILE
@@ -22,21 +17,46 @@ interface VolumeAttr {
 	isMuted?: number;
 }
 
-const Icon = styled(Button).attrs<VolumeAttr>(({ isMuted }) => ({
-	style: {
-		backgroundImage: `url(${isMuted === 0 ? volumeOff : volumeMax})`,
-	},
-}))<VolumeAttr>``;
+const Button = css`
+	@media only screen and (max-width: 767px) {
+		display: none;
+	}
 
-export const VolumeIconMobile = styled(Icon)<VolumeAttr>`
-	border-radius: 5px;
+	width: 30px;
+	height: 30px;
 
-	background-color: ${(props) =>
-		props.isActive ? 'var(--season-color)' : 'transparent'};
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
+	border-radius: 8px;
+
+	svg {
+		width: 80%;
+		height: 80%;
+	}
+`;
+
+export const VolumeIconMobile = styled.div`
 	@media only screen and (min-width: 768px) {
 		display: none;
 	}
+
+	&.active {
+		background-color: var(--player-color);
+	}
+
+	${Button}
+`;
+
+export const VolumeIcon = styled.div`
+	@media only screen and (max-width: 767px) {
+		display: none;
+	}
+
+	margin-right: 10px;
+
+	${Button}
 `;
 
 /*
@@ -56,13 +76,6 @@ export const VolumeContainer = styled.div`
 
 	@media only screen and (max-width: 767px) {
 		width: 30px !important;
-	}
-`;
-
-export const VolumeIcon = styled(Icon)<VolumeAttr>`
-	margin-right: 10px;
-	@media only screen and (max-width: 768px) {
-		display: none;
 	}
 `;
 
@@ -90,7 +103,7 @@ export const VolumeBar = styled.div<VolumeAttr>`
 	}
 `;
 
-export const Volume = styled(InputRange).attrs({
+export const VolumeInputRange = styled(InputRange).attrs({
 	type: `range`,
 	min: 0,
 	max: 100,
