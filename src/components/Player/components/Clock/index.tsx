@@ -3,13 +3,11 @@ import React, { useCallback } from 'react';
 import { Content } from './styles';
 
 interface ClockAttr {
-	className: string;
 	duration: number;
 	currentTime: number;
 }
 
 const Clock: React.FunctionComponent<ClockAttr> = ({
-	className,
 	duration,
 	currentTime,
 }: ClockAttr) => {
@@ -27,11 +25,7 @@ const Clock: React.FunctionComponent<ClockAttr> = ({
 		return splited.join(':');
 	}, []);
 
-	return (
-		<Content className={className}>
-			{handleTimeFormat(duration - currentTime)}
-		</Content>
-	);
+	return <Content>{handleTimeFormat(duration - currentTime)}</Content>;
 };
 
 export default Clock;

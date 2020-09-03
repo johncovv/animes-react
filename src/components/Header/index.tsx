@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
-import { FiHeart, FiArchive, FiSearch, FiMenu } from 'react-icons/fi';
+import { FiSave, FiSearch, FiMenu } from 'react-icons/fi';
+import { MdWatchLater } from 'react-icons/md';
 
 import { HeaderTag } from './styles';
 
@@ -99,7 +100,7 @@ const Header: React.FunctionComponent = () => {
 					/>
 				</div>
 				<div className="header__buttons">
-					<FiArchive
+					<MdWatchLater
 						className="popup__history-icon"
 						size={24}
 						onClick={() => {
@@ -107,7 +108,7 @@ const Header: React.FunctionComponent = () => {
 							handleTogglePopup('history', 'saved');
 						}}
 					/>
-					<FiHeart
+					<FiSave
 						className="popup__saved-icon"
 						size={24}
 						onClick={() => {

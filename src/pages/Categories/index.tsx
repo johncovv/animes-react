@@ -1,26 +1,25 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-
 import { GrSearch, GrFormNext, GrFormPrevious } from 'react-icons/gr';
-
+import { useParams } from 'react-router-dom';
 import Pagination from 'react-paginate';
 
+// components, hooks
 import Grid from '../../components/AnimeGrid';
-
-import backgroundImage from '../../assets/img/background/filter.png';
-
-import GlobalFilters from '../../styles/page.styles';
-
-import CategoriesJson from '../../assets/categories.json';
-
 import MultiSelect from '../../components/MultiSelect';
 import Input from '../../components/Input';
+import { useLoadingHook } from '../../hooks/loading';
 
+// assets
+import backgroundImage from '../../assets/img/background/filter.png';
+import CategoriesJson from '../../assets/categories.json';
+
+// utils, services
 import api from '../../services/api.client';
 import { FilterAnime } from '../../utils/filter-request-data';
-
 import CreateQuery from '../../utils/categories-filter-format';
 
+// styles
+import GlobalFilters from '../../styles/page.styles';
 import { FiltersContainer, ResultContainer } from './styles';
 
 interface CategoriesParams {
@@ -35,6 +34,8 @@ interface OptionDataType {
 
 const Categories: React.FunctionComponent = () => {
 	const { search } = useParams<CategoriesParams>();
+
+	const { handleSetStatus } = useLoadingHook();
 
 	const [pagination, setPagination] = useState<number | undefined>(undefined);
 
@@ -72,7 +73,8 @@ const Categories: React.FunctionComponent = () => {
 		const filtered = await FilterAnime(data.value);
 		setResultsLength(parseInt(data['odata.count'], 10));
 		setGridData(filtered);
-	}, [pagination, query, search]);
+		handleSetStatus(false);
+	}, [pagination, query, search, handleSetStatus]);
 
 	const handleSearchRequest = useCallback(() => {
 		const formatedQuery = CreateQuery({

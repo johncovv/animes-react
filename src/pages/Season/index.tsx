@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import backgroundImage from '../../assets/img/background/season.png';
 
+// components, hooks
+import Grid from '../../components/AnimeGrid';
+import { useLoadingHook } from '../../hooks/loading';
+
+// utils, services
 import { FilterAnime } from '../../utils/filter-request-data';
-
-import GlobalSeason from '../../styles/page.styles';
-
 import api from '../../services/api.client';
 
-import Grid from '../../components/AnimeGrid';
-
+// styles
+import GlobalSeason from '../../styles/page.styles';
 import { Content, Title } from './styles';
 
 const Season: React.FunctionComponent = () => {
 	const [data, setData] = useState<ApiRequest.Anime[]>([]);
+
+	const { handleSetStatus } = useLoadingHook();
 
 	useEffect(() => {
 		const requestData = async (): Promise<void> => {
@@ -22,13 +26,14 @@ const Season: React.FunctionComponent = () => {
 				const filtered = await FilterAnime(response.data);
 
 				setData((state) => [...state, ...filtered]);
+				handleSetStatus(false);
 			} catch (err) {
 				window.console.log(err);
 			}
 		};
 
 		requestData();
-	}, []);
+	}, [handleSetStatus]);
 
 	return (
 		<>
