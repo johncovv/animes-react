@@ -1,6 +1,6 @@
-name: Deploy from Develop PR
+name: Deploy from Develop Branch
 on:
-  pull_request:
+  push:
     branches: [develop]
 
 jobs:
@@ -12,7 +12,7 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: build
+      - name: Build
         run: npm run build
         env:
           REACT_APP_PREFIX: ${{ secrets.REACT_APP_PREFIX }}
@@ -24,4 +24,4 @@ jobs:
           user: ${{ secrets.DEVELOP_FTP_USERNAME }}
           password: ${{ secrets.DEVELOP_FTP_PASSWORD }}
           localDir: "build"
-          remoteDir: ${{ secrets.PREVIEW_FTP_PATH}}
+          remoteDir: ${{ secrets.DEVELOP_FTP_PATH}}
