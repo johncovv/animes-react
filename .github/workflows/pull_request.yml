@@ -2,7 +2,7 @@ name: Deploy from Develop PR
 on:
   pull_request:
     branches: [ develop ]
-    
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,17 +11,17 @@ jobs:
 
       - name: Install
         run: npm install
-        
+
       - name: build
         run: npm run build
         env:
           REACT_APP_PREFIX: ${{ secrets.REACT_APP_PREFIX }}
-        
+
       - name: Upload to FTP
         uses: sebastianpopp/ftp-action@releases/v2
         with:
           host: ${{ secrets.PREVIEW_FTP_SERVER }}
           user: ${{ secrets.PREVIEW_FTP_USERNAME }}
           password: ${{ secrets.PREVIEW_FTP_PASSWORD }}
-          localDir: "/build"
-          remoteDir: "/animes-react-preview.epizy.com/htdocs"
+          localDir: "build"
+          remoteDir: "animes-react-preview.epizy.com/htdocs"
