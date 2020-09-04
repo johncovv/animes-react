@@ -23,6 +23,7 @@
 		"lodash": "^4.17.20",
 		"polished": "^3.6.5",
 		"react": "^16.13.1",
+		"react-app-polyfill": "^1.0.6",
 		"react-dom": "^16.13.1",
 		"react-icons": "^3.10.0",
 		"react-multi-select-component": "^3.0.1",
@@ -60,12 +61,15 @@
 		"production": [
 			">0.2%",
 			"not dead",
-			"not op_mini all"
+			"not op_mini all",
+			"ie >= 9"
 		],
 		"development": [
 			"last 1 chrome version",
 			"last 1 firefox version",
-			"last 1 safari version"
+			"last 1 safari version",
+			"last 1 edge version",
+			"ie 11"
 		]
 	}
 }

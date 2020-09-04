@@ -9,11 +9,9 @@ export default createGlobalStyle`
 		--fav-color: #EC2E2E;
 		--secondary-bg-color: #1f1f1f;
 		--blue-color: #228ef3;
-
 		--recent-color: #bd3c2f;
 		--season-color: #228ef3;
 		--filter-color: #ff008c;
-
 		--secondary-text-color: #929292;
 		--ternary-text-color: #616161;
 
@@ -54,6 +52,14 @@ export default createGlobalStyle`
 
 	ul {
 		list-style: none;
+	}
+
+	img {
+		display: block;
+	}
+
+	img[alt="www.000webhost.com"] {
+    display: none;
 	}
 
 	/* scrollbar */

@@ -120,8 +120,8 @@ export const HeaderTag = styled.header`
 				&.popup__history-icon {
 					&:hover,
 					&.popup__active {
-						* {
-							stroke: var(--history-color);
+						path {
+							fill: var(--history-color);
 							transition: 0.3s;
 						}
 					}
@@ -130,8 +130,8 @@ export const HeaderTag = styled.header`
 				&.popup__saved-icon {
 					&:hover,
 					&.popup__active {
-						path {
-							fill: var(--fav-color);
+						path,
+						polyline {
 							stroke: var(--fav-color);
 							transition: 0.3s;
 						}

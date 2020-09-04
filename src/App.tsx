@@ -1,34 +1,33 @@
 import React from 'react';
-
 import { BrowserRouter } from 'react-router-dom';
 
-import Routes from './routes';
-
+// components
 import Header from './components/Header';
-
-import GlobalStyled from './styles/global.styles';
-
 import Background from './components/Background';
-
 import History from './components/History';
 import Saved from './components/Saved';
+import Loading from './components/Loading';
 
+// styles
+import GlobalStyled from './styles/global.styles';
+
+// hooks, routes
 import AppProvider from './hooks';
+import Routes from './routes';
 
-const App: React.FunctionComponent = () => {
-	return (
-		<BrowserRouter>
-			<AppProvider>
-				<Header />
-				<History />
-				<Saved />
-				<Background>
-					<Routes />
-				</Background>
-			</AppProvider>
-			<GlobalStyled />
-		</BrowserRouter>
-	);
-};
+const App: React.FunctionComponent = () => (
+	<BrowserRouter>
+		<AppProvider>
+			<Header />
+			<Loading />
+			<History />
+			<Saved />
+			<Background>
+				<Routes />
+			</Background>
+		</AppProvider>
+		<GlobalStyled />
+	</BrowserRouter>
+);
 
 export default App;

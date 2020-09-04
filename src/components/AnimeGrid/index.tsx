@@ -7,6 +7,8 @@ import { Content, Item, ItemLink, Favorite, WatchLater } from './styles';
 import scaleImage from '../../assets/img/thumb-grid-proportion.png';
 import { useSaved } from '../../hooks/saved';
 
+import thumbNotFound from '../../assets/img/thumb-not-found.png';
+
 interface AnimeGridProps {
 	data: ApiRequest.Anime[];
 	isPopup?: boolean;
@@ -26,7 +28,7 @@ const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 	} = useSaved();
 
 	function handleFilterViews(number: number): string {
-		return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, '.');
+		return number.toString().replace(/(?=(?:\d{3})+(?:\.|$))/g, '.');
 	}
 
 	const handleClosePopup = useCallback(() => {
@@ -65,14 +67,18 @@ const AnimeGrid: React.FunctionComponent<AnimeGridProps> = ({
 								to={`/anime/${item.id}`}
 								onClick={() => handleClosePopup()}
 							>
-								<span
+								<img
 									className="grid__item--thumb"
-									style={{ backgroundImage: `url(${item.thumbnail})` }}
+									src={item.thumbnail}
+									alt={`${item.title} thumbnail`}
+									onError={(e) => {
+										e.currentTarget.src = thumbNotFound;
+									}}
 								/>
 								<img
 									className="grid__scale--thumb"
 									src={scaleImage}
-									alt={`${item.title} thumbnail`}
+									alt="thumb-scale"
 								/>
 								<p className="grid__item--title">{item.title}</p>
 								<div className="grid__item-hover">

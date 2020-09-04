@@ -1,34 +1,31 @@
 import React, { useEffect, useState, useCallback } from 'react';
-
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 
-import { FaSortAmountDown, FaSortAmountDownAlt } from 'react-icons/fa';
-import { FiHeart, FiClock } from 'react-icons/fi';
-import { BsFillEyeSlashFill } from 'react-icons/bs';
-
+// components, hooks
 import Player from '../../components/Player';
-import backgroundImage from '../../assets/img/background/anime.png';
-import descriptionThumbnailError from '../../assets/img/thumb-not-found.png';
-
 import { useHistory as useHistoryHook } from '../../hooks/history';
-import { useSaved } from '../../hooks/saved';
 import { useEspisodesHook } from '../../hooks/episodes';
+import { useLoadingHook } from '../../hooks/loading';
 
-import FilterEpisodeTitle from '../../utils/filter-episode-title';
+// assets
+import backgroundImage from '../../assets/img/background/anime.png';
+import playerPoster from '../../assets/img/background/player2.png';
 
+// utils, services
+import api from '../../services/api.client';
 import {
 	FilterEpisodesList,
 	FilterAnime,
 	FilterEpisodeOptions,
 } from '../../utils/filter-request-data';
 
-import api from '../../services/api.client';
-
-import { Content, Description, PlayerContainer } from './styles';
-
-import playerPoster from '../../assets/img/background/player2.png';
-
+// styles
+import { Content, PlayerContainer } from './styles';
 import GlobalAnime from '../../styles/page.styles';
+
+// internal components
+import Description from './components/Description';
+import EpisodesList from './components/EpisodesList';
 
 interface AnimeParams {
 	animeId: string;
@@ -36,18 +33,9 @@ interface AnimeParams {
 }
 
 const AnimePage: React.FunctionComponent = () => {
-	const {
-		addToHistory,
-		history,
-		removeFromHistory,
-		updateCurrentTime,
-	} = useHistoryHook();
-	const {
-		favorites,
-		watchLater,
-		toggleFavorites,
-		toggleWatchLater,
-	} = useSaved();
+	const { handleSetStatus } = useLoadingHook();
+
+	const { addToHistory, updateCurrentTime } = useHistoryHook();
 	const { handleChangeEpisode, activeEpisode } = useEspisodesHook();
 
 	const { animeId, episodeId } = useParams<AnimeParams>();
@@ -82,7 +70,6 @@ const AnimePage: React.FunctionComponent = () => {
 				const response = await api.get(`/api/episodioexes/links?id=${id}`);
 
 				const filtered = await FilterEpisodeOptions(response.data);
-
 				handleChangeEpisode(id, title, filtered);
 			} catch (err) {
 				window.console.log(err);
@@ -118,6 +105,7 @@ const AnimePage: React.FunctionComponent = () => {
 					await setAnimeDescription(filtered[0]);
 
 					episodesListRequest();
+					handleSetStatus(false);
 				} catch (err) {
 					window.console.log(err);
 				}
@@ -128,7 +116,7 @@ const AnimePage: React.FunctionComponent = () => {
 		return () => {
 			isMounted = false;
 		};
-	}, [animeId]);
+	}, [animeId, handleSetStatus]);
 
 	const findOnEpisodeList = useCallback(
 		(episode: number): ApiRequest.EpiList | undefined => {
@@ -174,21 +162,6 @@ const AnimePage: React.FunctionComponent = () => {
 		setEpisodesList(episodesList.reverse());
 	}, [setIsReverse, isReverse, episodesList, setEpisodesList]);
 
-	const handleEpisodeThumbnailError = useCallback((e) => {
-		const element = e.target as HTMLImageElement;
-
-		const thumbNotFound =
-			'https://placeholder.pics/svg/320x200/000000-000000/FFFFFF/thumbnail%20not%20found';
-
-		element.src = thumbNotFound;
-	}, []);
-
-	const hadleDescriptionThumbnailError = useCallback((e) => {
-		const element = e.target as HTMLImageElement;
-
-		element.src = descriptionThumbnailError;
-	}, []);
-
 	useEffect(() => {
 		const video = document.querySelector('video');
 		if (video) {
@@ -201,149 +174,25 @@ const AnimePage: React.FunctionComponent = () => {
 		}
 	}, [activeEpisode, updateCurrentTime]);
 
-	const options = {
-		poster: playerPoster,
-		autoplay: true,
-		loop: true,
-	};
-
 	return (
 		<>
 			<Content>
 				<PlayerContainer>
-					<Player {...options} />
-					<div className="episodes__list">
-						<div className="episodes__list--options">
-							<div className="episodes__list--options-left">
-								{!isReverse ? (
-									<FaSortAmountDown
-										size={24}
-										onClick={handleSortEpisodesList}
-										className="episodes__list--options-sort"
-									/>
-								) : (
-									<FaSortAmountDownAlt
-										size={24}
-										onClick={handleSortEpisodesList}
-										className="episodes__list--options-sort"
-									/>
-								)}
-							</div>
-
-							<div className="episodes__list--options-right">
-								<FiHeart
-									size={24}
-									onClick={() => toggleFavorites(animeDescription)}
-									className={`episodes__list--options-favorite ${
-										favorites.find((i) => i.id === animeDescription.id)
-											? 'checked'
-											: ''
-									}`}
-								/>
-								<FiClock
-									size={24}
-									onClick={() => toggleWatchLater(animeDescription)}
-									className={`episodes__list--options-watch-later ${
-										watchLater.find((i) => i.id === animeDescription.id)
-											? 'checked'
-											: ''
-									}`}
-								/>
-							</div>
-						</div>
-						<div className="episodes__list--container">
-							{episodesList &&
-								episodesList.map(({ id, title }, index, arr) => (
-									<button
-										type="button"
-										key={id}
-										onClick={(e) => {
-											const titleFiltered = FilterEpisodeTitle({
-												index,
-												episodeTitle: title,
-												animeTitle: animeDescription.title,
-												genres: animeDescription.genres,
-												total: isReverse ? arr.length : undefined,
-											});
-
-											handleEpisodeRequest(e, id, titleFiltered);
-											handleAddToHistory(id, title, 0);
-										}}
-										className={`${
-											history.find((i) => i.id === id) ? 'checked' : ''
-										}`}
-									>
-										<div className="thumb">
-											<span
-												className={`uncheck-history ${
-													history.find((i) => i.id === id) ? 'checked' : ''
-												}`}
-											>
-												<BsFillEyeSlashFill
-													size={25}
-													onClick={(e) => {
-														e.stopPropagation();
-														removeFromHistory(id);
-													}}
-												/>
-											</span>
-											<img
-												data-id={id}
-												className="episode-thumbnail"
-												src={`http://thumb.zetai.info/${id}.jpg`}
-												onError={(e) => handleEpisodeThumbnailError(e)}
-												alt={`${title} thumbnail`}
-											/>
-										</div>
-										<div className="titles-container">
-											<p className="title">
-												{FilterEpisodeTitle({
-													index,
-													animeTitle: animeDescription.title,
-													episodeTitle: title,
-													genres: animeDescription.genres,
-													total: !isReverse ? arr.length : undefined,
-												})}
-											</p>
-											<p className="anime-title">{animeDescription.title}</p>
-										</div>
-									</button>
-								))}
-						</div>
-					</div>
+					<Player poster={playerPoster} autoplay loop />
+					<EpisodesList
+						animeDescription={animeDescription}
+						episodesList={episodesList}
+						handleEpisodeRequest={(event, id, title) => {
+							handleEpisodeRequest(event, id, title);
+						}}
+						handleAddToHistory={(id, title, currentTime) => {
+							handleAddToHistory(id, title, currentTime);
+						}}
+						isReverse={isReverse}
+						handleSortEpisodesList={handleSortEpisodesList}
+					/>
 				</PlayerContainer>
-				<Description>
-					{animeDescription && (
-						<>
-							<div className="description__poster">
-								<div className="description__poster--background">
-									<img
-										src={animeDescription.thumbnail}
-										onError={(e) => hadleDescriptionThumbnailError(e)}
-										alt={`${animeDescription.title?.toLowerCase()} thumbnail`}
-									/>
-								</div>
-							</div>
-							<div className="descriptions__details">
-								<p className="description__title">{animeDescription.title}</p>
-								<p>
-									Status:{' '}
-									<span>{!animeDescription.status ? 'Completo' : 'Ativo'}</span>
-								</p>
-								<p>
-									Lançamento: <span>{animeDescription.year}</span>
-								</p>
-								<p>
-									Gêneros: <span>{animeDescription.genres}.</span>
-								</p>
-								<div>
-									<p>Descrição:</p>
-									<span>{animeDescription.description}</span>
-								</div>
-							</div>
-						</>
-					)}
-				</Description>
+				<Description animeDescription={animeDescription} />
 			</Content>
 
 			<GlobalAnime backgroundImage={backgroundImage} varRoot="season" />

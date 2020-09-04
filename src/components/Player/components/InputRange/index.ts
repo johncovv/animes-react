@@ -23,7 +23,7 @@ export const InputRange = styled.input`
 	}
 
 	&:active {
-		& ~ .player__range--current::after {
+		& ~ .player__input--current::after {
 			box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 		}
 	}
@@ -32,28 +32,28 @@ export const InputRange = styled.input`
 		transition: all 0.2s;
 		height: 10px;
 
-		& ~ .player__range--background,
-		& ~ .player__range--current,
-		& ~ .player__range--buffering,
-		& ~ .player__bar--loading,
+		& ~ .player__input--background,
+		& ~ .player__input--current,
+		& ~ .player__input--buffered,
+		& ~ .player__input--loading,
 		&::-webkit-slider-thumb,
 		&::after {
 			transition: height 0.2s;
 			height: 10px;
 		}
 
-		& ~ .player__range--current::after {
+		& ~ .player__input--current::after {
 			transition: all 0.2s;
 			width: 15px;
 			height: 15px;
 			right: -7.5px;
 		}
 
-		& ~ .player__bar--loading {
+		& ~ .player__input--loading {
 			background-size: 8px 8px;
 		}
 
-		& ~ .progress__bar--time {
+		& ~ .player__input--time {
 			display: block;
 		}
 	}
@@ -67,7 +67,7 @@ export const InputRangeCurrent = styled.div`
 	height: 5px;
 	z-index: 8;
 
-	background: var(--season-color);
+	background: var(--player-color);
 
 	border-radius: 50px;
 
