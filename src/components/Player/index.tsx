@@ -270,7 +270,11 @@ const Player: React.FunctionComponent<PlayerProps> = ({
 
 				{/* player controls */}
 				<PlayerOptions className="player__controls">
-					<PlayPauseLoading isLoading={isLoading} isPlaying={isPlaying} />
+					<PlayPauseLoading
+						isLoading={isLoading}
+						isPlaying={isPlaying}
+						videoRef={videoElement}
+					/>
 
 					{/* progressbar */}
 					<ProgressBar
