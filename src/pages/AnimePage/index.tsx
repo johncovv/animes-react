@@ -155,6 +155,9 @@ const AnimePage: React.FunctionComponent = () => {
 		handleEpisodeRequest,
 		handleAddToHistory,
 		findOnEpisodeList,
+		handleSetStatus,
+		pathname,
+		historyHook,
 	]);
 
 	const handleSortEpisodesList = useCallback(() => {
