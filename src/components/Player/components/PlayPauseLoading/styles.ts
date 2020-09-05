@@ -19,8 +19,12 @@ export const Content = styled.div`
 	justify-content: center;
 	align-items: center;
 
-	&:not(.loading):hover {
-		background-color: var(--player-color);
+	&:not(.loading) {
+		cursor: pointer;
+
+		&:hover {
+			background-color: var(--player-color);
+		}
 	}
 
 	svg {

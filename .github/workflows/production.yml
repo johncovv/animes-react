@@ -1,0 +1,27 @@
+name: Deploy Production
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: npm install
+
+      - name: Build
+        run: npm run build
+        env:
+          REACT_APP_PREFIX: ${{ secrets.REACT_APP_PREFIX }}
+
+      - name: Upload to Production FTP
+        uses: sebastianpopp/ftp-action@releases/v2
+        with:
+          host: ${{ secrets.PRODUCTION_FTP_SERVER }}
+          user: ${{ secrets.PRODUCTION_FTP_USERNAME }}
+          password: ${{ secrets.PRODUCTION_FTP_PASSWORD }}
+          localDir: "build"
+          remoteDir: ${{ secrets.PRODUCTION_FTP_PATH}}
