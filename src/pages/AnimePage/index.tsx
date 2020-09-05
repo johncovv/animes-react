@@ -48,7 +48,7 @@ const AnimePage: React.FunctionComponent = () => {
 	const [isReverse, setIsReverse] = useState(false);
 
 	const { pathname } = useLocation();
-	const { push } = useHistory();
+	const historyHook = useHistory();
 
 	const handleAddToHistory = useCallback(
 		(id: number, title: string, currentTime: number) => {
@@ -62,26 +62,11 @@ const AnimePage: React.FunctionComponent = () => {
 		[addToHistory, animeId],
 	);
 
-	const handleEpisodeRequest = useCallback(
-		async (event, id: number, title: string) => {
-			if (event) event.preventDefault();
-
-			try {
-				const response = await api.get(`/api/episodioexes/links?id=${id}`);
-
-				const filtered = await FilterEpisodeOptions(response.data);
-				handleChangeEpisode(id, title, filtered);
-			} catch (err) {
-				window.console.log(err);
-			}
-		},
-		[handleChangeEpisode],
-	);
-
 	useEffect(() => {
 		let isMounted = true;
 
 		if (isMounted) {
+			handleSetStatus(true);
 			const episodesListRequest = async (): Promise<void> => {
 				try {
 					const response = await api.get(`/api/episodioexes/${animeId}`);
@@ -102,7 +87,7 @@ const AnimePage: React.FunctionComponent = () => {
 
 					const filtered = await FilterAnime(response.data.value);
 
-					await setAnimeDescription(filtered[0]);
+					setAnimeDescription(filtered[0]);
 
 					episodesListRequest();
 					handleSetStatus(false);
@@ -125,6 +110,22 @@ const AnimePage: React.FunctionComponent = () => {
 		[episodesList],
 	);
 
+	const handleEpisodeRequest = useCallback(
+		async (event, id: number, title: string) => {
+			if (event) event.preventDefault();
+
+			try {
+				const response = await api.get(`/api/episodioexes/links?id=${id}`);
+
+				const filtered = await FilterEpisodeOptions(response.data);
+				handleChangeEpisode(id, title, filtered);
+			} catch (err) {
+				window.console.log(err);
+			}
+		},
+		[handleChangeEpisode],
+	);
+
 	useEffect(() => {
 		const requestOnLoadEpisode = async (): Promise<void> => {
 			if (episodeId) {
@@ -140,7 +141,8 @@ const AnimePage: React.FunctionComponent = () => {
 					if (pathSplited) {
 						pathSplited.pop();
 
-						push(pathSplited.join('/'));
+						historyHook.replace(pathSplited.join('/'));
+						handleSetStatus(false);
 					}
 				}
 			}
@@ -150,8 +152,6 @@ const AnimePage: React.FunctionComponent = () => {
 	}, [
 		episodeId,
 		activeEpisode,
-		pathname,
-		push,
 		handleEpisodeRequest,
 		handleAddToHistory,
 		findOnEpisodeList,

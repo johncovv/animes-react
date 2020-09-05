@@ -15,7 +15,7 @@ const Routes: React.FunctionComponent = () => {
 	const { pathname } = useLocation();
 
 	useEffect(() => {
-		handleSetStatus(true);
+		if (!pathname.match('anime')) handleSetStatus(true);
 	}, [pathname, handleSetStatus]);
 
 	return (
