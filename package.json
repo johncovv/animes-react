@@ -20,7 +20,7 @@
 		"@types/react-dom": "^16.9.0",
 		"axios": "^0.19.2",
 		"dotenv": "^8.2.0",
-		"lodash": "^4.17.20",
+		"lodash": "^4.17.21",
 		"polished": "^3.6.5",
 		"react": "^16.13.1",
 		"react-app-polyfill": "^1.0.6",
